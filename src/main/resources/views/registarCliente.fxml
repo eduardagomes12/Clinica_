@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.ClienteController"
+            prefWidth="400" prefHeight="380">
+    <children>
+
+        <Label text="Registar Cliente" layoutX="140" layoutY="20" style="-fx-font-size: 18px;"/>
+
+        <Label text="Nome:" layoutX="40" layoutY="70"/>
+        <TextField fx:id="nomeField" layoutX="140" layoutY="65" prefWidth="200"/>
+
+        <Label text="Contacto:" layoutX="40" layoutY="110"/>
+        <TextField fx:id="contactoField" layoutX="140" layoutY="105" prefWidth="200"/>
+
+        <Label text="Email:" layoutX="40" layoutY="150"/>
+        <TextField fx:id="emailField" layoutX="140" layoutY="145" prefWidth="200"/>
+
+        <Label text="Morada:" layoutX="40" layoutY="190"/>
+        <TextField fx:id="moradaField" layoutX="140" layoutY="185" prefWidth="200"/>
+
+        <Button text="Guardar" layoutX="140" layoutY="250" prefWidth="90"
+                onAction="#guardarCliente"/>
+
+    </children>
+</AnchorPane>
