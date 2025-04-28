@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.MenuPrincipalController"
+            prefWidth="600" prefHeight="400">
+    <children>
+
+        <Label text="Gestão da Clínica Veterinária" layoutX="150" layoutY="30" style="-fx-font-size: 22px;"/>
+
+        <Button text="Registar Cliente" layoutX="200" layoutY="100" prefWidth="200"
+                onAction="#abrirRegistarCliente"/>
+
+        <Button text="Listar Clientes" layoutX="200" layoutY="160" prefWidth="200"
+                onAction="#abrirListarClientes"/>
+
+        <Button text="Registar Animal" layoutX="200" layoutY="220" prefWidth="200"
+                onAction="#abrirRegistarAnimal"/>
+
+        <Button text="Listar Animais" layoutX="200" layoutY="340" prefWidth="200"
+                onAction="#abrirListarAnimais"/>
+
+        <Button text="Marcar Consulta" layoutX="200" layoutY="280" prefWidth="200"
+                onAction="#abrirMarcarConsulta"/>
+
+    </children>
+</AnchorPane>-->
+
+
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.MenuPrincipalController"
+            prefWidth="1000" prefHeight="700"
+            stylesheets="@/styles/style.css">
+
+    <!-- TOPO -->
+    <top>
+        <HBox spacing="20" style="-fx-background-color: #d1f5e0; -fx-padding: 10;" alignment="CENTER_LEFT" prefHeight="70">
+            <Button fx:id="menuButton" text="☰" onAction="#toggleMenu" style="-fx-font-size: 24px; -fx-background-color: transparent;"/>
+            <Label text="GCVet - Gestão de Clínicas Veterinárias" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <!-- MENU LATERAL -->
+    <left>
+        <VBox fx:id="menuPane" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;" visible="false">
+            <Button text="Registar Cliente" onAction="#abrirRegistarCliente" prefWidth="200"/>
+            <Button text="Listar Clientes" onAction="#abrirListarClientes" prefWidth="200"/>
+            <Button text="Registar Animal" onAction="#abrirRegistarAnimal" prefWidth="200"/>
+            <Button text="Listar Animais" onAction="#abrirListarAnimais" prefWidth="200"/>
+            <Button text="Marcar Consulta" onAction="#abrirMarcarConsulta" prefWidth="200"/>
+            <Button text="Listar Consultas" onAction="#abrirListarConsultas" prefWidth="200"/>
+        </VBox>
+    </left>
+
+    <!-- ÁREA DE CONTEÚDO -->
+    <center>
+        <StackPane fx:id="conteudoPane">
+            <VBox alignment="CENTER" spacing="20">
+                <ImageView fx:id="logoCentro" fitWidth="300" preserveRatio="true"/>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

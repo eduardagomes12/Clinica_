@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.ListarClientesController"
+            prefWidth="600" prefHeight="400">
+    <children>
+
+        <Label text="Lista de Clientes" layoutX="220" layoutY="20" style="-fx-font-size: 20px;"/>
+
+        <TableView fx:id="tabelaClientes" layoutX="50" layoutY="70" prefWidth="500" prefHeight="250">
+            <columns>
+                <TableColumn fx:id="nomeColumn" text="Nome" prefWidth="150"/>
+                <TableColumn fx:id="contactoColumn" text="Contacto" prefWidth="120"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="120"/>
+                <TableColumn fx:id="moradaColumn" text="Morada" prefWidth="110"/>
+            </columns>
+        </TableView>
+
+        <Button text="Voltar" layoutX="260" layoutY="340" prefWidth="80" onAction="#voltarMenu"/>
+
+        <Button text="Voltar ao Menu" layoutX="260" layoutY="340" prefWidth="180" onAction="#voltarMenuPrincipal"/>
+
+
+    </children>
+</AnchorPane>

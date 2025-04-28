@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.RegistarAnimalController"
+            prefWidth="500" prefHeight="400">
+    <children>
+
+        <Label text="Registar Animal" layoutX="180" layoutY="20" style="-fx-font-size: 20px;"/>
+
+        <Label text="Nome:" layoutX="50" layoutY="80"/>
+        <TextField fx:id="nomeField" layoutX="150" layoutY="75" prefWidth="250"/>
+
+        <Label text="Idade:" layoutX="50" layoutY="120"/>
+        <TextField fx:id="idadeField" layoutX="150" layoutY="115" prefWidth="250"/>
+
+        <Label text="Espécie:" layoutX="50" layoutY="160"/>
+        <TextField fx:id="especieField" layoutX="150" layoutY="155" prefWidth="250"/>
+
+        <Label text="Raça:" layoutX="50" layoutY="200"/>
+        <TextField fx:id="racaField" layoutX="150" layoutY="195" prefWidth="250"/>
+
+        <Label text="Cliente Dono:" layoutX="50" layoutY="240"/>
+        <ComboBox fx:id="clienteComboBox" layoutX="150" layoutY="235" prefWidth="250"/>
+
+        <Button text="Guardar" layoutX="200" layoutY="300" prefWidth="100" onAction="#guardarAnimal"/>
+
+        <Button text="Voltar ao Menu" layoutX="200" layoutY="340" prefWidth="180" onAction="#voltarMenuPrincipal"/>
+
+    </children>
+</AnchorPane>

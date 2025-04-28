@@ -8,10 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-@SpringBootApplication(scanBasePackages = "com.example.clinicadesktop") // para apanhar tudo
+@SpringBootApplication(scanBasePackages = "com.example.clinicadesktop")
 public class MainApp extends Application {
 
     private ConfigurableApplicationContext springContext;
+    private static Stage primaryStage; // Guardar o stage principal
 
     @Override
     public void init() {
@@ -19,14 +20,18 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/registarCliente.fxml"));
-        fxmlLoader.setControllerFactory(springContext::getBean); // permite usar @Autowired nos controllers
+    public void start(Stage stage) throws Exception {
+        primaryStage = stage; // guardar a referência ao Stage
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
 
-        Scene scene = new Scene(fxmlLoader.load());
-        primaryStage.setTitle("Clínica Veterinária - Backoffice");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuPrincipal.fxml"));
+        loader.setControllerFactory(springContext::getBean);
+
+        Scene scene = new Scene(loader.load());
+        stage.setTitle("Clínica Veterinária - Menu Principal");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @Override
@@ -35,6 +40,11 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args); // chama o JavaFX Application
+        launch(args);
+    }
+
+    // Permite que outras classes acedam ao Stage principal
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

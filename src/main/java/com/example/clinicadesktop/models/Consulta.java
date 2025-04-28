@@ -36,8 +36,8 @@ public class Consulta {
     private Animal animal;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_utilizador", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_utilizador", nullable = true)
     private Utilizador utilizador;
 
     @ManyToMany

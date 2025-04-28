@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.RegistarConsultaController"
+            prefWidth="600" prefHeight="500">
+    <children>
+
+        <Label text="Marcar Consulta" layoutX="220" layoutY="20" style="-fx-font-size: 22px;"/>
+
+        <Label text="Data:" layoutX="50" layoutY="80"/>
+        <DatePicker fx:id="dataPicker" layoutX="200" layoutY="75" prefWidth="300"/>
+
+        <Label text="Motivo:" layoutX="50" layoutY="140"/>
+        <TextArea fx:id="motivoField" layoutX="200" layoutY="135" prefWidth="300" prefHeight="80"/>
+
+        <Label text="Veterinário Responsável:" layoutX="50" layoutY="240"/>
+        <TextField fx:id="veterinarioField" layoutX="200" layoutY="235" prefWidth="300"/>
+
+        <Label text="Animal:" layoutX="50" layoutY="300"/>
+        <ComboBox fx:id="animalComboBox" layoutX="200" layoutY="295" prefWidth="300"/>
+
+        <Button text="Guardar Consulta" layoutX="200" layoutY="370" prefWidth="150" onAction="#guardarConsulta"/>
+
+        <Button text="Voltar ao Menu" layoutX="370" layoutY="370" prefWidth="180" onAction="#voltarMenuPrincipal"/>
+
+    </children>
+</AnchorPane>

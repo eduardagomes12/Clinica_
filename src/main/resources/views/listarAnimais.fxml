@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.clinicadesktop.controllers.ListarAnimaisController"
+            prefWidth="700" prefHeight="400">
+    <children>
+
+        <Label text="Lista de Animais" layoutX="270" layoutY="20" style="-fx-font-size: 20px;"/>
+
+        <TableView fx:id="tabelaAnimais" layoutX="30" layoutY="70" prefWidth="640" prefHeight="250">
+            <columns>
+                <TableColumn fx:id="nomeColumn" text="Nome" prefWidth="120"/>
+                <TableColumn fx:id="idadeColumn" text="Idade" prefWidth="80"/>
+                <TableColumn fx:id="especieColumn" text="Espécie" prefWidth="120"/>
+                <TableColumn fx:id="racaColumn" text="Raça" prefWidth="120"/>
+                <TableColumn fx:id="clienteColumn" text="Dono" prefWidth="180"/>
+            </columns>
+        </TableView>
+
+        <Button text="Voltar ao Menu" layoutX="300" layoutY="340" prefWidth="180" onAction="#voltarMenuPrincipal"/>
+
+    </children>
+</AnchorPane>

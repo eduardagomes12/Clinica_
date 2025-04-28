@@ -14,7 +14,7 @@ public class AnimalService {
     private AnimalRepository repository;
 
     public List<Animal> findAll() {
-        return repository.findAll();
+        return repository.findAllWithCliente();
     }
 
     public Animal findById(Long id) {

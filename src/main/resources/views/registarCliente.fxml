@@ -25,5 +25,12 @@
         <Button text="Guardar" layoutX="140" layoutY="250" prefWidth="90"
                 onAction="#guardarCliente"/>
 
+        <Button text="Listar Clientes" layoutX="250" layoutY="250" prefWidth="120"
+                onAction="#abrirListarClientes"/>
+
+        <Button text="Voltar ao Menu" layoutX="250" layoutY="300" prefWidth="180" onAction="#voltarMenuPrincipal"/>
+
+
+
     </children>
 </AnchorPane>
