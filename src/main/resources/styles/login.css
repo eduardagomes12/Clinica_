@@ -1,0 +1,44 @@
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Inputs estilizados */
+.text-field, .password-field, .combo-box {
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-color: #d1d8e0;
+    -fx-border-width: 1.5;
+    -fx-background-color: white;
+    -fx-padding: 10 15;
+    -fx-font-size: 15px;
+    -fx-prompt-text-fill: #a0a0a0;
+}
+
+/* Foco */
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #74c0fc;
+    -fx-border-width: 2px;
+}
+
+/* Botão Login estilizado */
+.login-button {
+    -fx-background-color: #74c0fc;
+    -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.3, 0, 2);
+}
+
+.login-button:hover {
+    -fx-background-color: #4dabf7;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.1, 0, 4);
+}

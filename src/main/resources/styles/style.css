@@ -1,17 +1,68 @@
-/* style.css */
-
 .root {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-background-color: #e6f7f2;
 }
 
-.label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #427FA3;
+/* Header */
+.top-bar {
+    -fx-background-color: #3A7CA5;
+    -fx-padding: 12 20;
+    -fx-spacing: 10;
 }
 
+.top-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Ícone do menu */
+.menu-icon {
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+/* Side menu */
+.side-menu {
+    -fx-background-color: #3A7CA5;
+    -fx-pref-width: 180px;
+    -fx-padding: 10 0;
+}
+
+/* Botões do menu lateral */
+.side-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 12 20;
+    -fx-pref-width: 160px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+}
+
+.side-button:hover {
+    -fx-background-color: #5599c0;
+    -fx-text-fill: white;
+}
+
+.side-button:focused {
+    -fx-background-color: #2c6387;
+    -fx-text-fill: white;
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #3A7CA5;
+}
+
+/* Botões gerais */
 .button {
-    -fx-background-color: #427FA3;
+    -fx-background-color: #3A7CA5;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 8px;
@@ -19,9 +70,10 @@
 }
 
 .button:hover {
-    -fx-background-color: #85B9D9;
+    -fx-background-color: #5599c0;
 }
 
+/* Inputs */
 .text-field, .text-area, .combo-box, .date-picker {
     -fx-background-color: white;
     -fx-border-color: #D9D9D9;
@@ -29,6 +81,7 @@
     -fx-padding: 5px;
 }
 
+/* Tabelas */
 .table-view {
     -fx-background-color: white;
     -fx-border-color: #cccccc;
@@ -36,7 +89,7 @@
 }
 
 .table-view .column-header-background {
-    -fx-background-color: #85B9D5;
+    -fx-background-color: #5599c0;
 }
 
 .table-view .column-header, .table-view .filler {
