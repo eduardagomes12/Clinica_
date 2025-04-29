@@ -39,6 +39,7 @@ public class MainApp extends Application {
         springContext.close();
     }
 
+
     public static void main(String[] args) {
         launch(args);
     }

@@ -14,7 +14,7 @@ public class ConsultaService {
     private ConsultaRepository repository;
 
     public List<Consulta> findAll() {
-        return repository.findAll();
+        return repository.findAllWithAnimal();
     }
 
     public Consulta findById(Long id) {
