@@ -7,6 +7,7 @@
             fx:controller="com.example.clinicadesktop.controllers.ListarConsultasController"
             prefWidth="800" prefHeight="600">
 
+<<<<<<< HEAD
     <top>
         <Label text="Lista de Consultas" style="-fx-font-size: 24px; -fx-font-weight: bold;" BorderPane.alignment="CENTER"/>
     </top>
@@ -54,3 +55,4 @@
 
     </children>
 </AnchorPane>
+

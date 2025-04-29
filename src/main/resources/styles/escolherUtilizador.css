@@ -1,0 +1,28 @@
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Logo */
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.1, 0, 4);
+}
+
+/* Botões */
+.button {
+    -fx-background-color: #74c0fc;
+    -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.2, 0, 2);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button:hover {
+    -fx-background-color: #4dabf7;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}

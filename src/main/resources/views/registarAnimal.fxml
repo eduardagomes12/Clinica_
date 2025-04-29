@@ -3,31 +3,40 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.clinicadesktop.controllers.RegistarAnimalController"
-            prefWidth="500" prefHeight="400">
-    <children>
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.clinicadesktop.controllers.RegistarAnimalController">
 
-        <Label text="Registar Animal" layoutX="180" layoutY="20" style="-fx-font-size: 20px;"/>
+    <VBox alignment="CENTER">
+        <VBox spacing="20" alignment="CENTER" maxWidth="420" style="
+            -fx-background-color: white;
+            -fx-padding: 30;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.3, 0, 4);
+        ">
+            <Label text="Registar Animal" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-        <Label text="Nome:" layoutX="50" layoutY="80"/>
-        <TextField fx:id="nomeField" layoutX="150" layoutY="75" prefWidth="250"/>
+            <GridPane hgap="10" vgap="12" alignment="CENTER">
+                <Label text="Nome:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="nomeField" prefWidth="200" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Idade:" layoutX="50" layoutY="120"/>
-        <TextField fx:id="idadeField" layoutX="150" layoutY="115" prefWidth="250"/>
+                <Label text="Idade:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="idadeField" prefWidth="200" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="Espécie:" layoutX="50" layoutY="160"/>
-        <TextField fx:id="especieField" layoutX="150" layoutY="155" prefWidth="250"/>
+                <Label text="Espécie:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="especieField" prefWidth="200" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Raça:" layoutX="50" layoutY="200"/>
-        <TextField fx:id="racaField" layoutX="150" layoutY="195" prefWidth="250"/>
+                <Label text="Raça:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="racaField" prefWidth="200" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-        <Label text="Cliente Dono:" layoutX="50" layoutY="240"/>
-        <ComboBox fx:id="clienteComboBox" layoutX="150" layoutY="235" prefWidth="250"/>
+                <Label text="Cliente Dono:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="clienteComboBox" prefWidth="200" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
 
-        <Button text="Guardar" layoutX="200" layoutY="300" prefWidth="100" onAction="#guardarAnimal"/>
-
-        <Button text="Voltar ao Menu" layoutX="200" layoutY="340" prefWidth="180" onAction="#voltarMenuPrincipal"/>
-
-    </children>
-</AnchorPane>
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Guardar" onAction="#guardarAnimal" prefWidth="100"/>
+                <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="140"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</StackPane>

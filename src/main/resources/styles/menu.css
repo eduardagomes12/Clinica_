@@ -1,0 +1,35 @@
+.top-bar {
+    -fx-background-color: #b2e0c7;
+    -fx-padding: 12 20;
+    -fx-spacing: 10;
+}
+
+.top-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #347d7f;
+}
+
+.menu-icon {
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+}
+
+.side-menu {
+    -fx-background-color: #f0f8f5;
+    -fx-padding: 20;
+}
+
+.side-button {
+    -fx-background-color: #4f92a7;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-pref-width: 160;
+}
+
+.side-button:hover {
+    -fx-background-color: #3c7a93;
+}

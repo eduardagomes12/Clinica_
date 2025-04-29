@@ -11,31 +11,38 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication(scanBasePackages = "com.example.clinicadesktop")
 public class MainApp extends Application {
 
-    private ConfigurableApplicationContext springContext;
-    private static Stage primaryStage; // Guardar o stage principal
+    private static ConfigurableApplicationContext springContext;
+    private static Stage primaryStage;
 
     @Override
     public void init() {
-        springContext = SpringApplication.run(MainApp.class); // arranca Spring
+        // Iniciar o contexto Spring Boot
+        springContext = SpringApplication.run(MainApp.class);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        primaryStage = stage; // guardar a referência ao Stage
-        primaryStage.setWidth(1000);
-        primaryStage.setHeight(700);
+        primaryStage = stage;
+        primaryStage.setWidth(400);
+        primaryStage.setHeight(500);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuPrincipal.fxml"));
+        // Carregar o FXML da escolha de utilizador
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/escolherUtilizador.fxml"));
         loader.setControllerFactory(springContext::getBean);
 
         Scene scene = new Scene(loader.load());
-        stage.setTitle("Clínica Veterinária - Menu Principal");
+
+        // Carregar o estilo específico da tela de escolher utilizador
+        scene.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+
+        stage.setTitle("Escolher Utilizador - Clínica Veterinária");
         stage.setScene(scene);
         stage.show();
     }
 
     @Override
     public void stop() {
+        // Fechar o contexto Spring Boot
         springContext.close();
     }
 
@@ -44,8 +51,11 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    // Permite que outras classes acedam ao Stage principal
     public static Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public static ConfigurableApplicationContext getSpringContext() {
+        return springContext;
     }
 }
