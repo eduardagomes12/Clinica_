@@ -46,7 +46,7 @@ public class EscolherUtilizadorController {
 
     @FXML
     private void escolherRecep() {
-        abrirLoginComTipo("Recepcionista");
+        abrirLoginComTipo("Rececionista");
     }
 
     private void abrirLoginComTipo(String tipo) {

@@ -37,7 +37,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        userTypeComboBox.getItems().addAll("Administrador", "Veterinário", "Recepcionista");
+        userTypeComboBox.getItems().addAll("Administrador", "Veterinário", "Rececionista");
 
         try {
             logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
@@ -71,17 +71,22 @@ public class LoginController {
                 loader.setControllerFactory(context::getBean);
                 Parent root = loader.load();
 
+                // Passar o tipo de utilizador para o menu principal
+                MenuPrincipalController menuController = loader.getController();
+                menuController.setTipoUtilizador(tipo);
+
                 Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root, 1100, 700);
+
+                stage.setScene(scene);
                 stage.setTitle("Menu Principal");
+                stage.setResizable(true);
+                stage.centerOnScreen();
                 stage.show();
 
             } catch (Exception e) {
-                e.printStackTrace(); // mostra erro no console
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Erro ao carregar o menu.");
-                alert.setContentText(e.getMessage());
-                alert.show();
+                e.printStackTrace();
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro ao carregar o menu: " + e.getMessage());
             }
         } else {
             mostrarAlerta(Alert.AlertType.ERROR, "Credenciais incorretas ou tipo de utilizador inválido.");

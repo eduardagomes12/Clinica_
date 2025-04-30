@@ -23,8 +23,12 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
-        primaryStage.setWidth(400);
-        primaryStage.setHeight(500);
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(700);
+        primaryStage.setMinWidth(900);   // opcional
+        primaryStage.setMinHeight(600);  // opcional
+
+
 
         // Carregar o FXML da escolha de utilizador
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/escolherUtilizador.fxml"));
