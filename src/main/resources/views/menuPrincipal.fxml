@@ -25,12 +25,12 @@
     <!-- SIDE MENU -->
     <left>
         <VBox fx:id="sideMenu" styleClass="side-menu" spacing="0" alignment="TOP_LEFT" prefWidth="180">
-            <Button text="Registar Cliente" onAction="#abrirRegistarCliente" styleClass="side-button"/>
-            <Button text="Listar Clientes" onAction="#abrirListarClientes" styleClass="side-button"/>
-            <Button text="Registar Animal" onAction="#abrirRegistarAnimal" styleClass="side-button"/>
-            <Button text="Listar Animais" onAction="#abrirListarAnimais" styleClass="side-button"/>
-            <Button text="Marcar Consulta" onAction="#abrirMarcarConsulta" styleClass="side-button"/>
-            <Button text="Listar Consultas" onAction="#abrirListarConsultas" styleClass="side-button"/>
+            <Button fx:id="btnRegistarCliente" text="Registar Cliente" onAction="#abrirRegistarCliente" styleClass="side-button"/>
+            <Button fx:id="btnListarClientes" text="Listar Clientes" onAction="#abrirListarClientes" styleClass="side-button"/>
+            <Button fx:id="btnRegistarAnimal" text="Registar Animal" onAction="#abrirRegistarAnimal" styleClass="side-button"/>
+            <Button fx:id="btnListarAnimais" text="Listar Animais" onAction="#abrirListarAnimais" styleClass="side-button"/>
+            <Button fx:id="btnMarcarConsulta" text="Marcar Consulta" onAction="#abrirMarcarConsulta" styleClass="side-button"/>
+            <Button fx:id="btnListarConsultas" text="Listar Consultas" onAction="#abrirListarConsultas" styleClass="side-button"/>
 
             <Pane VBox.vgrow="ALWAYS"/> <!-- Empurra o botão para o fundo -->
 
