@@ -11,10 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +82,11 @@ public class RegistarConsultaController {
             String veterinario = veterinarioField.getText();
             Animal animalSelecionado = animalComboBox.getValue();
 
+            if (data == null || motivo.isEmpty() || veterinario.isEmpty() || animalSelecionado == null) {
+                mostrarAlerta("Aviso", "Todos os campos devem ser preenchidos e um animal selecionado.");
+                return;
+            }
+
             Consulta consulta = new Consulta();
             consulta.setData(data);
             consulta.setMotivo(motivo);
@@ -93,11 +95,23 @@ public class RegistarConsultaController {
 
             consultaService.save(consulta);
 
+            mostrarAlerta("Sucesso", "Consulta marcada com sucesso!");
             limparCampos();
+
         } catch (Exception e) {
+            mostrarAlerta("Erro", "Erro ao marcar consulta.");
             e.printStackTrace();
         }
     }
+
+    private void mostrarAlerta(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
+
 
     private void limparCampos() {
         dataPicker.setValue(null);

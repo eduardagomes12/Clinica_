@@ -47,6 +47,11 @@ public class ClienteController {
             String email = emailField.getText();
             String morada = moradaField.getText();
 
+            if (nome.isEmpty() || contacto.isEmpty() || email.isEmpty() || morada.isEmpty()) {
+                mostrarAlerta("Aviso", "Todos os campos devem ser preenchidos.");
+                return;
+            }
+
             Cliente cliente = new Cliente();
             cliente.setNome(nome);
             cliente.setContacto(contacto);

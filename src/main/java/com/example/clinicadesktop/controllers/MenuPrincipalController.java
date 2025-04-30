@@ -1,17 +1,24 @@
 package com.example.clinicadesktop.controllers;
 
+import com.example.clinicadesktop.app.MainApp;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
+
 import java.io.IOException;
+
 
 @Controller
 public class MenuPrincipalController {
@@ -26,13 +33,29 @@ public class MenuPrincipalController {
     private ImageView logoImageView;
 
     @FXML
+    private VBox sideMenu;
+
+    @FXML
+    private BorderPane rootPane;
+
+    @Autowired
+    private ApplicationContext springContext;
+
+
+    @FXML
     public void initialize() {
         try {
             logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
         } catch (Exception e) {
             System.out.println("Logo não encontrado.");
         }
+        //Platform.runLater(() -> rootPane.requestLayout());
+        Platform.runLater(() -> {
+            rootPane.applyCss();
+            rootPane.layout();
+        });
     }
+
 
     private void carregarConteudo(String caminhoFxml) {
         try {
@@ -84,4 +107,28 @@ public class MenuPrincipalController {
     private void abrirListarConsultas() {
         carregarConteudo("/views/listarConsultas.fxml");
     }
+
+    @FXML
+    private void terminarSessao() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/escolherUtilizador.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Scene scene = new Scene(loader.load());
+
+            Stage stage = MainApp.getPrimaryStage();
+
+            stage.setWidth(400);
+            stage.setHeight(500);
+            stage.setScene(scene);
+            stage.centerOnScreen();  // <-- isto força a janela a centralizar mesmo após resize
+            stage.setTitle("Escolher Utilizador - Clínica Veterinária");
+
+            //Stage stage = (Stage) sideMenu.getScene().getWindow(); // usar o botão como referência
+            //stage.setScene(scene);
+            //stage.setTitle("Escolher Utilizador");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

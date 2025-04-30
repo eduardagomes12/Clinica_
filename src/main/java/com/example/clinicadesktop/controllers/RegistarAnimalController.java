@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -82,10 +83,17 @@ public class RegistarAnimalController {
     private void guardarAnimal() {
         try {
             String nome = nomeField.getText();
-            int idade = Integer.parseInt(idadeField.getText());
+            String idadeStr = idadeField.getText();
             String especie = especieField.getText();
             String raca = racaField.getText();
             Cliente clienteSelecionado = clienteComboBox.getValue();
+
+            if (nome.isEmpty() || idadeStr.isEmpty() || especie.isEmpty() || raca.isEmpty() || clienteSelecionado == null) {
+                mostrarAlerta("Aviso", "Todos os campos devem ser preenchidos e um cliente selecionado.");
+                return;
+            }
+
+            int idade = Integer.parseInt(idadeStr);
 
             Animal animal = new Animal();
             animal.setNome(nome);
@@ -96,10 +104,23 @@ public class RegistarAnimalController {
 
             animalService.save(animal);
 
+            mostrarAlerta("Sucesso", "Animal registado com sucesso!");
             limparCampos();
+
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Erro", "Idade deve ser um número inteiro.");
         } catch (Exception e) {
+            mostrarAlerta("Erro", "Erro ao registar animal.");
             e.printStackTrace();
         }
+    }
+
+    private void mostrarAlerta(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 
     private void limparCampos() {

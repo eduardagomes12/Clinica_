@@ -5,7 +5,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane fx:id="rootPane"
+            xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.clinicadesktop.controllers.MenuPrincipalController"
             stylesheets="@/styles/style.css">
 
@@ -30,6 +31,10 @@
             <Button text="Listar Animais" onAction="#abrirListarAnimais" styleClass="side-button"/>
             <Button text="Marcar Consulta" onAction="#abrirMarcarConsulta" styleClass="side-button"/>
             <Button text="Listar Consultas" onAction="#abrirListarConsultas" styleClass="side-button"/>
+
+            <Pane VBox.vgrow="ALWAYS"/> <!-- Empurra o botão para o fundo -->
+
+            <Button text="Terminar Sessão" onAction="#terminarSessao" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" alignment="CENTER" maxWidth="Infinity" />
         </VBox>
     </left>
 
