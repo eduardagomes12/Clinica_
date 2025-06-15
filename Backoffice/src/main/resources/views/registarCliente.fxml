@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.core.clinicadesktop.controllers.ClienteController">
+
+    <VBox alignment="CENTER">
+        <VBox spacing="20" alignment="CENTER" maxWidth="400" style="
+            -fx-background-color: white;
+            -fx-padding: 30;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.3, 0, 4);
+        ">
+
+            <Label text="Registar Cliente" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <Label text="Nome:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="nomeField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="180"/>
+
+                <Label text="Contacto:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="contactoField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="180"/>
+
+                <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="emailField" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="180"/>
+
+                <Label text="Morada:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="moradaField" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="180"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Guardar" onAction="#guardarCliente" prefWidth="90"/>
+                <Button text="Listar Clientes" onAction="#abrirListarClientes" prefWidth="120"/>
+            </HBox>
+
+            <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="180"/>
+        </VBox>
+    </VBox>
+</StackPane>
