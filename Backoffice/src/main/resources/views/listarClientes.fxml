@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.example.core.clinicadesktop.controllers.ListarClientesController"
+           fx:controller="com.example.clinicadesktop.controllers.ListarClientesController"
            prefWidth="600" prefHeight="400">
 
     <VBox spacing="20" alignment="CENTER">

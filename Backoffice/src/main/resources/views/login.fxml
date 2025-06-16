@@ -6,7 +6,7 @@
 <?import javafx.geometry.Pos?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.core.clinicadesktop.controllers.LoginController"
+            fx:controller="com.example.clinicadesktop.controllers.LoginController"
             stylesheets="@/styles/login.css">
 
     <top>

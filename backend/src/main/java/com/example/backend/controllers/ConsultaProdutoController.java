@@ -1,7 +1,8 @@
 package com.example.backend.controllers;
 
 import com.example.backend.DTO.ConsultaProdutoDTO;
-import com.example.backend.services.ConsultaProdutoService;
+import com.example.core.models.ConsultaProduto;
+import com.example.core.services.ConsultaProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +20,30 @@ public class ConsultaProdutoController {
 
     @GetMapping
     public ResponseEntity<List<ConsultaProdutoDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll());
+        List<ConsultaProdutoDTO> dtos = service.findAll().stream()
+                .map(this::toDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping
     public ResponseEntity<ConsultaProdutoDTO> create(@RequestBody ConsultaProdutoDTO dto) {
-        return ResponseEntity.ok(service.save(dto));
+        return service.save(dto.getIdConsulta(), dto.getIdProduto())
+                .map(this::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/{consultaId}/{produtoId}")
     public ResponseEntity<Void> delete(@PathVariable Long consultaId, @PathVariable Long produtoId) {
         service.delete(consultaId, produtoId);
         return ResponseEntity.noContent().build();
+    }
+
+    private ConsultaProdutoDTO toDTO(ConsultaProduto cp) {
+        ConsultaProdutoDTO dto = new ConsultaProdutoDTO();
+        dto.setIdConsulta(cp.getConsulta().getId());
+        dto.setIdProduto(cp.getProduto().getId());
+        return dto;
     }
 }

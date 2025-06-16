@@ -7,7 +7,7 @@
 
 <BorderPane fx:id="rootPane"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.core.clinicadesktop.controllers.MenuPrincipalController"
+            fx:controller="com.example.clinicadesktop.controllers.MenuPrincipalController"
             stylesheets="@/styles/style.css">
 
     <!-- HEADER -->

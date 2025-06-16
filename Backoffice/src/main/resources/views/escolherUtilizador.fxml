@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.core.clinicadesktop.controllers.EscolherUtilizadorController"
+            fx:controller="com.example.clinicadesktop.controllers.EscolherUtilizadorController"
             stylesheets="@/styles/escolherUtilizador.css">
 
     <!-- TOPO -->
