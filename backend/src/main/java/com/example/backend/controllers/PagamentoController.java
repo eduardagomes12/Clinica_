@@ -57,8 +57,19 @@ public class PagamentoController {
         PagamentoDTO dto = new PagamentoDTO();
         dto.setId(p.getId());
         dto.setValor(p.getValor());
+        dto.setValorTotal(p.getValorTotal());
         dto.setData(p.getData());
-        dto.setIdFatura(p.getFatura().getId());
+
+        if (p.getFatura() != null) {
+            dto.setIdFatura(p.getFatura().getId());
+        }
+
+        if (p.getTipoPagamento() != null)
+            dto.setIdTipoPagamento(p.getTipoPagamento().getId());
+
+        if (p.getConsulta() != null)
+            dto.setIdConsulta(p.getConsulta().getId());
+
         return dto;
     }
 
@@ -66,9 +77,18 @@ public class PagamentoController {
         Pagamento p = new Pagamento();
         p.setId(dto.getId());
         p.setValor(dto.getValor());
+        p.setValorTotal(dto.getValorTotal());
         p.setData(dto.getData());
-        Fatura f = service.getFaturaById(dto.getIdFatura());
-        p.setFatura(f);
+
+        p.setFatura(service.getFaturaById(dto.getIdFatura()));
+
+        if (dto.getIdTipoPagamento() != null)
+            p.setTipoPagamento(service.getTipoPagamentoById(dto.getIdTipoPagamento()));
+
+        if (dto.getIdConsulta() != null)
+            p.setConsulta(service.getConsultaById(dto.getIdConsulta()));
+
         return p;
     }
+
 }

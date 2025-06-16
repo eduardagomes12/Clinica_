@@ -56,14 +56,16 @@ public class TipoTratamentoController {
         dto.setId(tipo.getId());
         dto.setNome(tipo.getNome());
         dto.setDescricao(tipo.getDescricao());
+        dto.setValor(tipo.getValor());
         return dto;
     }
 
     private TipoTratamento toEntity(TipoTratamentoDTO dto) {
         TipoTratamento tipo = new TipoTratamento();
-        tipo.setId(dto.getId());
         tipo.setNome(dto.getNome());
         tipo.setDescricao(dto.getDescricao());
+        tipo.setValor(dto.getValor());
         return tipo;
     }
+
 }
