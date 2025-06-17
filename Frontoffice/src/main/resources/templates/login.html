@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - GC Vet</title>
+    <style>
+        body {
+            background-color: #C2F0D4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #154360;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background: #154360;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background: #0f304d;
+        }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <h2>Login</h2>
+    <form method="post" th:action="@{/login}">
+        <input type="text" placeholder="Email" name="email">
+        <input type="password" placeholder="Senha" name="senha">
+        <button type="submit">Entrar</button>
+    </form>
+</div>
+</body>
+</html>

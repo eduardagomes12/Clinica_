@@ -21,13 +21,15 @@
                 <DatePicker fx:id="dataPicker" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="220"/>
 
                 <Label text="Motivo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <TextArea fx:id="motivoField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="220" prefHeight="80"/>
+                <TextArea fx:id="motivoField" prefRowCount="3" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="220" prefHeight="80"/>
 
-                <Label text="Veterinário Responsável:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <TextField fx:id="veterinarioField" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="220"/>
+                <Label text="Veterinário:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="veterinarioComboBox" promptText="Selecionar veterinário"
+                          GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250"/>
 
                 <Label text="Animal:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="animalComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="220"/>
+                <ComboBox fx:id="animalComboBox" promptText="Selecionar animal"
+                          GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="250"/>
             </GridPane>
 
             <HBox spacing="15" alignment="CENTER">

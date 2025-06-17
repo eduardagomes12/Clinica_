@@ -37,6 +37,10 @@ public class MenuPrincipalController {
     @FXML private Button btnListarConsultas;
     @FXML private Button btnRegistarPagamento;
     @FXML private Button btnListarPagamentos;
+    @FXML private Button btnConsultarAgenda;
+
+    @Autowired
+    private ApplicationContext springContext;
 
     private String tipoUtilizador;
 
@@ -135,6 +139,8 @@ public class MenuPrincipalController {
     @FXML private void abrirListarPagamentos() {
         carregarConteudo("/views/listarPagamentos.fxml");
     }
+
+    @FXML private void abrirConsultarAgenda() { carregarConteudo("/views/consultarAgenda.fxml");}
 
     @FXML
     private void terminarSessao() {

@@ -5,6 +5,7 @@ import com.example.core.models.Consulta;
 import com.example.core.models.Utilizador;
 import com.example.core.services.AnimalService;
 import com.example.core.services.ConsultaService;
+import com.example.core.services.UtilizadorService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class RegistarConsultaController {
@@ -34,7 +36,7 @@ public class RegistarConsultaController {
     private TextArea motivoField;
 
     @FXML
-    private TextField veterinarioField;
+    private ComboBox<Utilizador> veterinarioComboBox;
 
     @FXML
     private ComboBox<Animal> animalComboBox;
@@ -46,11 +48,15 @@ public class RegistarConsultaController {
     private AnimalService animalService;
 
     @Autowired
+    private UtilizadorService utilizadorService;
+
+    @Autowired
     private ApplicationContext springContext;
 
     @FXML
     public void initialize() {
         carregarAnimais();
+        carregarVeterinarios();
     }
 
     private void carregarAnimais() {
@@ -72,15 +78,36 @@ public class RegistarConsultaController {
         });
     }
 
+    private void carregarVeterinarios() {
+        List<Utilizador> veterinarios = utilizadorService.findAll().stream()
+                .filter(u -> u.getTipoUtilizador().getId() == 2)
+                .collect(Collectors.toList());
+
+        ObservableList<Utilizador> veterinariosObservable = FXCollections.observableArrayList(veterinarios);
+        veterinarioComboBox.setItems(veterinariosObservable);
+
+        veterinarioComboBox.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Utilizador utilizador) {
+                return (utilizador != null) ? utilizador.getNome() : "";
+            }
+
+            @Override
+            public Utilizador fromString(String string) {
+                return null;
+            }
+        });
+    }
+
     @FXML
     private void guardarConsulta() {
         try {
             LocalDate data = dataPicker.getValue();
             String motivo = motivoField.getText();
-            String veterinario = veterinarioField.getText();
+            Utilizador veterinario = veterinarioComboBox.getValue();
             Animal animalSelecionado = animalComboBox.getValue();
 
-            if (data == null || motivo.isEmpty() || veterinario.isEmpty() || animalSelecionado == null) {
+            if (data == null || motivo.isEmpty() || veterinario == null || animalSelecionado == null) {
                 mostrarAlerta("Aviso", "Todos os campos devem ser preenchidos e um animal selecionado.");
                 return;
             }
@@ -88,7 +115,7 @@ public class RegistarConsultaController {
             Consulta consulta = new Consulta();
             consulta.setData(data);
             consulta.setMotivo(motivo);
-            consulta.setVeterinarioResponsavel(veterinario);
+            consulta.setVeterinarioResponsavel(veterinario.getNome());
             consulta.setAnimal(animalSelecionado);
 
             Utilizador utilizadorAtual = LoginController.utilizadorAutenticado;
@@ -112,7 +139,7 @@ public class RegistarConsultaController {
     private void limparCampos() {
         dataPicker.setValue(null);
         motivoField.clear();
-        veterinarioField.clear();
+        veterinarioComboBox.getSelectionModel().clearSelection();
         animalComboBox.getSelectionModel().clearSelection();
     }
 

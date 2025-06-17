@@ -16,7 +16,8 @@
     <modules>
         <module>core</module>
         <module>Backoffice</module>
-        <module>backend</module> <!-- Adicionado -->
+        <module>backend</module>
+        <module>Frontoffice</module>
     </modules>
 
     <properties>

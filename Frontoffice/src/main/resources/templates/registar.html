@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registo - GC Vet</title>
+    <style>
+        body {
+            background-color: #C2F0D4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .registar-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        .registar-box h2 {
+            margin-bottom: 20px;
+            color: #154360;
+        }
+
+        .registar-box input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .registar-box button {
+            width: 100%;
+            padding: 10px;
+            background: #154360;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .registar-box button:hover {
+            background: #0f304d;
+        }
+    </style>
+</head>
+<body>
+<div class="registar-box">
+    <h2>Registar Conta</h2>
+    <form method="post" th:action="@{/registar}">
+        <input type="text" placeholder="Nome" name="nome">
+        <input type="email" placeholder="Email" name="email">
+        <input type="password" placeholder="Senha" name="senha">
+        <button type="submit">Criar Conta</button>
+    </form>
+</div>
+</body>
+</html>

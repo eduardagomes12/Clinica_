@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GCVet</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #C2F0D4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 30px;
+            box-sizing: border-box;
+        }
+
+        header a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #154360; /* Azul escuro */
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        .logo {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 280px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="/login">Login</a>
+    <a href="/registar">Registar</a>
+</header>
+
+<div class="logo">
+    <img src="/logo.png" alt="Logo GCVet">
+</div>
+</body>
+</html>
