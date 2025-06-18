@@ -5,6 +5,8 @@ import com.example.core.models.Utilizador;
 import com.example.core.reps.TipoUtilizadorRepository;
 import com.example.core.reps.UtilizadorRepository;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -51,5 +53,14 @@ public class UtilizadorService {
     public TipoUtilizador getTipoUtilizadorById(Long id) {
         return tipoUtilizadorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("TipoUtilizador não encontrado com ID: " + id));
+    }
+
+    public Utilizador guardar(Utilizador utilizador) {
+        return utilizadorRepository.save(utilizador);
+    }
+
+    // Procura utilizador pelo email (para login)
+    public Optional<Utilizador> encontrarPorEmail(String email) {
+        return utilizadorRepository.findByEmail(email);
     }
 }

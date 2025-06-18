@@ -3,6 +3,7 @@ package com.example.core.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "consulta")
@@ -16,6 +17,7 @@ public class Consulta {
     private String motivo;
     private String diagnostico;
     private String veterinarioResponsavel;
+    private LocalTime hora;
 
     @ManyToOne
     @JoinColumn(name = "id_animal")
@@ -46,4 +48,8 @@ public class Consulta {
 
     public Utilizador getUtilizador() { return utilizador; }
     public void setUtilizador(Utilizador utilizador) { this.utilizador = utilizador; }
+
+    public LocalTime getHora() { return hora; }
+
+    public void setHora(LocalTime hora) { this.hora = hora; }
 }

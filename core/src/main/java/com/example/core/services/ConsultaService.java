@@ -8,6 +8,7 @@ import com.example.core.reps.ConsultaRepository;
 import com.example.core.reps.UtilizadorRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,5 +61,17 @@ public class ConsultaService {
 
     public Optional<Utilizador> getUtilizadorById(Long id) {
         return utilizadorRepository.findById(id);
+    }
+
+    public List<Consulta> findByClienteId(Long clienteId) {
+        return consultaRepository.findByAnimalClienteId(clienteId);
+    }
+
+    public Optional<Consulta> findProximaConsultaByClienteId(Long clienteId) {
+        return consultaRepository.findTopByAnimal_Cliente_IdAndDataAfterOrderByDataAsc(clienteId, LocalDate.now());
+    }
+
+    public Optional<Consulta> findUltimaConsultaByClienteId(Long clienteId) {
+        return consultaRepository.findTopByAnimal_Cliente_IdAndDataBeforeOrderByDataDesc(clienteId, LocalDate.now());
     }
 }

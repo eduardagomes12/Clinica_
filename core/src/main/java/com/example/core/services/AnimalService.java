@@ -41,4 +41,8 @@ public class AnimalService {
     public Optional<Cliente> findClienteById(Long id) {
         return clienteRepo.findById(id);
     }
+
+    public List<Animal> findByClienteId(Long clienteId) {
+        return animalRepo.findByClienteId(clienteId);
+    }
 }
