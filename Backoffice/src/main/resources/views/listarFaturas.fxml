@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.clinicadesktop.controllers.ListarFaturasController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 40;" prefWidth="800" prefHeight="600">
+
+    <Label text="Lista de Faturas" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="tabelaFaturas" prefWidth="700" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="colNum" text="Nº" prefWidth="100"/>
+            <TableColumn fx:id="colData" text="Data" prefWidth="150"/>
+            <TableColumn fx:id="colValorTotal" text="Valor Total (€)" prefWidth="200"/>
+            <TableColumn fx:id="colTipoPagamento" text="Tipo de Pagamento" prefWidth="250"/>
+        </columns>
+    </TableView>
+
+    <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="180"/>
+</VBox>

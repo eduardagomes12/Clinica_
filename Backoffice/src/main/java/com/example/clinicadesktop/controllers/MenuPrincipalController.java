@@ -38,6 +38,9 @@ public class MenuPrincipalController {
     @FXML private Button btnRegistarPagamento;
     @FXML private Button btnListarPagamentos;
     @FXML private Button btnConsultarAgenda;
+    @FXML private Button btnEmitirFatura;
+    @FXML private Button btnListarFaturas;
+
 
     @Autowired
     private ApplicationContext springContext;
@@ -78,6 +81,8 @@ public class MenuPrincipalController {
                 btnRegistarAnimal.setVisible(false);
                 btnRegistarPagamento.setVisible(false);
                 btnListarPagamentos.setVisible(false);
+                btnEmitirFatura.setVisible(false);
+                btnListarFaturas.setVisible(false);
                 break;
 
             case "Recepcionista":
@@ -95,6 +100,7 @@ public class MenuPrincipalController {
             Node conteudo = loader.load();
             conteudoContainer.getChildren().setAll(conteudo);
         } catch (IOException e) {
+            e.printStackTrace();
             mostrarErro("Erro ao carregar a página", e.getMessage());
         }
     }
@@ -141,6 +147,12 @@ public class MenuPrincipalController {
     }
 
     @FXML private void abrirConsultarAgenda() { carregarConteudo("/views/consultarAgenda.fxml");}
+
+    @FXML private void abrirListarFaturas() { carregarConteudo("/views/listarFaturas.fxml");}
+
+    @FXML private void abrirEmitirFatura() { carregarConteudo("/views/emitirFatura.fxml");}
+
+
 
     @FXML
     private void terminarSessao() {

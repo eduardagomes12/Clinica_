@@ -82,7 +82,7 @@ public class ConsultarAgendaController {
         Utilizador vetSelecionado = veterinarioComboBox.getSelectionModel().getSelectedItem();
         if (vetSelecionado != null) {
             List<Consulta> consultas = consultaService.findAll().stream()
-                    .filter(c -> c.getUtilizador().getId().equals(vetSelecionado.getId()))
+                    .filter(c -> c.getUtilizador() != null && c.getId().equals(vetSelecionado.getId()))
                     .collect(Collectors.toList());
 
             consultaTable.setItems(FXCollections.observableArrayList(consultas));
