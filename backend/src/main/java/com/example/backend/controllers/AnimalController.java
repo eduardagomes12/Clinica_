@@ -33,6 +33,17 @@ public class AnimalController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Operation(summary = "Listar animais por cliente")
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<AnimalDTO>> getByCliente(@PathVariable Long clienteId) {
+        List<AnimalDTO> dtos = animalService.findByClienteId(clienteId).stream()
+                .map(this::toDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+
+
     @Operation(summary = "Buscar animal por ID")
     @GetMapping("/{id}")
     public ResponseEntity<AnimalDTO> getById(@PathVariable Long id) {

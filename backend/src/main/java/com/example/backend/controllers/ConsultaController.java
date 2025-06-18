@@ -63,8 +63,14 @@ public class ConsultaController {
         dto.setVeterinarioResponsavel(c.getVeterinarioResponsavel());
         dto.setIdAnimal(c.getAnimal().getId());
         dto.setIdUtilizador(c.getUtilizador().getId());
+
+        // NOVO:
+        dto.setNomeAnimal(c.getAnimal().getNome());
+        dto.setHora(c.getHora());
+
         return dto;
     }
+
 
     private Consulta fromDTO(ConsultaDTO dto) {
         Consulta c = new Consulta();
@@ -79,6 +85,36 @@ public class ConsultaController {
         c.setUtilizador(service.getUtilizadorById(dto.getIdUtilizador())
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado")));
 
+        c.setHora(dto.getHora());
+
+
         return c;
     }
+
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<ConsultaDTO>> getByCliente(@PathVariable Long clienteId) {
+        List<ConsultaDTO> consultas = service.findByClienteId(clienteId).stream()
+                .map(this::toDTO)
+                .toList();
+        return ResponseEntity.ok(consultas);
+    }
+
+    @GetMapping("/cliente/{clienteId}/proxima")
+    public ResponseEntity<ConsultaDTO> getProximaConsulta(@PathVariable Long clienteId) {
+        return service.findProximaConsultaByClienteId(clienteId)
+                .map(this::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
+
+
+    @GetMapping("/cliente/{clienteId}/ultima")
+    public ResponseEntity<ConsultaDTO> getUltimaConsulta(@PathVariable Long clienteId) {
+        return service.findUltimaConsultaByClienteId(clienteId)
+                .map(this::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
+
+
 }
