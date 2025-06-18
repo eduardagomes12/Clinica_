@@ -1,58 +1,162 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt">
 <head>
-    <title>Registo - GC Vet</title>
+    <meta charset="UTF-8">
+    <title>Registar - GCVet</title>
     <style>
-        body {
-            background-color: #C2F0D4;
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body, html {
+            margin: 0;
+            height: 100%;
             font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #0a3968;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        .split-screen {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        .left-side {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background-color: #ffffff;
+            padding: 40px;
         }
 
-        .registar-box {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        .form-container {
+            width: 100%;
+            max-width: 400px;
         }
 
-        .registar-box h2 {
+        .form-container h2 {
             margin-bottom: 20px;
-            color: #154360;
+            color: #0a3968;
         }
 
-        .registar-box input {
+        .form-container input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 12px;
         }
 
-        .registar-box button {
+        .form-container button {
             width: 100%;
-            padding: 10px;
-            background: #154360;
+            padding: 12px;
+            background-color: #0a3968;
             color: white;
             border: none;
+            border-radius: 12px;
+            font-size: 16px;
             cursor: pointer;
         }
 
-        .registar-box button:hover {
-            background: #0f304d;
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .right-side {
+            background-color: #0a3968;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .right-side img {
+            max-width: 380px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .right-side h1 {
+            font-size: 22px;
+            color: #ffffff;
+            margin: 0;
         }
     </style>
 </head>
 <body>
-<div class="registar-box">
-    <h2>Registar Conta</h2>
-    <form method="post" th:action="@{/registar}">
-        <input type="text" placeholder="Nome" name="nome">
-        <input type="email" placeholder="Email" name="email">
-        <input type="password" placeholder="Senha" name="senha">
-        <button type="submit">Criar Conta</button>
-    </form>
+
+<header>
+    <a href="/login">← Voltar para login</a>
+    <span>GCVet</span>
+</header>
+
+<div class="split-screen">
+    <div class="left-side">
+        <div class="form-container">
+            <h2>Registar Conta</h2>
+            <form id="registarForm">
+                <input type="text" placeholder="Nome" name="nome" required>
+                <input type="email" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Senha" name="senha" required>
+                <button type="submit">Criar Conta</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <img src="/logo_branco.png" alt="Logo GCVet">
+    </div>
 </div>
+
+<script>
+    document.getElementById("registarForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const nome = this.nome.value;
+        const email = this.email.value;
+        const senha = this.senha.value;
+
+        const res = await fetch("http://localhost:8080/api/auth/registar", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, email, senha }) // só envia dados do utilizador
+        });
+
+        if (res.ok) {
+            alert("Conta criada com sucesso!");
+            window.location.href = "/login";
+        } else if (res.status === 409) {
+            alert("Já existe uma conta com este email.");
+        } else {
+            alert("Erro ao criar conta.");
+        }
+    });
+</script>
+
 </body>
 </html>

@@ -1,56 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>GCVet</title>
+    <title>Início - GCVet</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body, html {
             margin: 0;
-            background-color: #C2F0D4;
+            height: 100%;
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: #0a3968;
+            color: white;
         }
 
         header {
-            width: 100%;
+            background-color: #0a3968;
+            padding: 20px 40px;
             display: flex;
             justify-content: flex-end;
-            padding: 20px 30px;
-            box-sizing: border-box;
+            align-items: center;
         }
 
-        header a {
+        .header-links a {
+            background-color: white;
+            color: #0a3968;
+            padding: 8px 16px;
             margin-left: 20px;
+            border-radius: 8px;
             text-decoration: none;
-            color: #154360; /* Azul escuro */
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
+            border: none;
         }
 
-        header a:hover {
-            text-decoration: underline;
+        .header-links a:hover {
+            background-color: #9acbfa;
+            color: #0a3968;
         }
 
-        .logo {
-            margin-top: 80px;
+        .main-content {
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            padding: 60px 20px 40px;
         }
 
-        .logo img {
-            max-width: 280px;
+        .main-content img {
+            max-width: 300px;
+            width: 100%;
+            margin-bottom: 4px; /* mais próximo do slogan */
+        }
+
+        .slogan {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: white;
+            font-weight: normal;
+            max-width: 500px;
+        }
+
+        .start-button {
+            padding: 12px 28px;
+            background-color: white;
+            color: #0a3968;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .start-button:hover {
+            background-color: #9acbfa;
+            color: #0a3968;
         }
     </style>
 </head>
 <body>
+
 <header>
-    <a href="/login">Login</a>
-    <a href="/registar">Registar</a>
+    <div class="header-links">
+        <a href="/login">Entrar</a>
+        <a href="/registar">Registar</a>
+    </div>
 </header>
 
-<div class="logo">
-    <img src="/logo.png" alt="Logo GCVet">
+<div class="main-content">
+    <img src="/logo_branco.png" alt="Logo GCVet">
+    <div class="slogan">Cuidar dos animais começa com uma gestão inteligente.</div>
+    <button class="start-button" onclick="window.location.href='/login'">Entrar</button>
 </div>
+
 </body>
 </html>
