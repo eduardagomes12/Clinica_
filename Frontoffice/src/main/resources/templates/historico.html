@@ -330,12 +330,10 @@
       const card = document.createElement("div");
       card.className = "history-card";
       const dataFormatada = new Date(item.data + "T" + item.hora).toLocaleString("pt-PT");
-      const diagnostico = item.diagnostico?.trim() || "-";
       card.innerHTML = `
       <h4>${item.nomeAnimal} - ${item.tipo}</h4>
       <p><strong>Data:</strong> ${dataFormatada}</p>
       <p><strong>Veterinário:</strong> ${item.veterinario}</p>
-      <p><strong>Diagnóstico:</strong> ${diagnostico}</p>
     `;
       container.appendChild(card);
     });
@@ -405,7 +403,6 @@
       doc.text(`Tipo: ${item.tipo}`, 10, y); y += 6;
       doc.text(`Data: ${data}`, 10, y); y += 6;
       doc.text(`Veterinário: ${item.veterinario}`, 10, y); y += 6;
-      doc.text(`Diagnóstico: ${item.diagnostico || "-"}`, 10, y); y += 10;
     });
     doc.save("historico_consultas.pdf");
   }
@@ -416,7 +413,6 @@
       "Tipo": item.tipo,
       "Data": new Date(item.data + "T" + item.hora).toLocaleString("pt-PT"),
       "Veterinário": item.veterinario,
-      "Diagnóstico": item.diagnostico || "-"
     }));
 
     const planilha = XLSX.utils.json_to_sheet(dados);
