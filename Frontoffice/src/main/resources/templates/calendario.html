@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendário - GCVet</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+    <style>
+        body, html {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #0a3968;
+            height: 60px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-links a {
+            background-color: white;
+            color: #0a3968;
+            padding: 8px 16px;
+            margin-left: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+        }
+
+        .header-links a:hover {
+            background-color: #9acbfa;
+        }
+
+        .notification-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification-icon .badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #0a3968;
+            width: 220px;
+            padding: 30px 20px;
+            color: white;
+            position: fixed;
+            top: 60px; /* abaixo do header */
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #9acbfa;
+            color: #0a3968;
+        }
+
+        .main {
+            margin-left: 260px; /* compensação da sidebar */
+            padding: 30px;
+            display: flex;
+            gap: 40px;
+        }
+
+        #calendar {
+            flex: 2;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .upcoming {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .upcoming h3 {
+            color: #0a3968;
+            margin-bottom: 10px;
+        }
+
+        .event-card {
+            background: #f0f8ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 5px solid #0a3968;
+        }
+
+        .event-card h4 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .event-card p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #555;
+        }
+        .tippy-box[data-theme~='azul'] {
+            background-color: #0a3968;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 13px;
+            padding: 8px;
+        }
+
+        body {
+            padding-top: 60px; /* para compensar o header fixo */
+        }
+
+        .cancelar-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .cancelar-btn:hover {
+            background-color: #c9302c;
+        }
+
+        #popupConfirmacao {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #popupConfirmacao h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #0a3968;
+        }
+
+        #popupConfirmacao button {
+            margin: 10px 10px 0;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-sim {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .btn-cancelar {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .alerta-sucesso {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">GCVet</div>
+    <div class="header-links">
+        <div class="notification-icon" title="Notificações">
+            🔔
+            <div class="badge">2</div>
+        </div>
+        <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/marcarConsulta">Marcar Consulta</a>
+        <a href="/meusAnimais">Meus Animais</a>
+        <a href="/calendario">Calendário</a>
+        <a href="/historico">Histórico</a>
+    </div>
+
+    <div class="main">
+        <div id="calendar"></div>
+
+        <div class="upcoming">
+            <h3>Próximas Consultas</h3>
+            <div id="eventList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup de confirmação -->
+<div id="popupConfirmacao">
+    <h4 id="textoPopup">Tem a certeza que quer desmarcar?</h4>
+    <button class="btn-sim" id="confirmarSim">Sim</button>
+    <button class="btn-cancelar" onclick="fecharPopup()">Cancelar</button>
+</div>
+
+<!-- Alerta de sucesso -->
+<div class="alerta-sucesso" id="alertaSucesso">Consulta cancelada com sucesso!</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script>
+    const API_URL = "http://localhost:8080";
+    const user = JSON.parse(sessionStorage.getItem("utilizador"));
+    if (!user) window.location.href = "/login";
+
+    let consultaIdSelecionada = null;
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        const calendarEl = document.getElementById('calendar');
+        const eventList = document.getElementById('eventList');
+
+        const res = await fetch(`${API_URL}/api/calendario/consultas/${user.id}`);
+        const consultas = await res.json();
+        const agora = new Date();
+
+        const events = consultas
+            .filter(c => new Date(`${c.data}T${c.hora}`) >= agora)
+            .map(c => ({
+                title: `${c.nomeAnimal} - ${c.motivo}`,
+                start: `${c.data}T${c.hora}`,
+                extendedProps: {
+                    medico: c.veterinarioResponsavel,
+                    motivo: c.motivo,
+                    dataHora: `${c.data}T${c.hora}`
+                }
+            }));
+
+        consultas
+            .filter(c => new Date(`${c.data}T${c.hora}`) >= agora)
+            .sort((a, b) => new Date(`${a.data}T${a.hora}`) - new Date(`${b.data}T${b.hora}`))
+            .forEach(c => {
+                const item = document.createElement("div");
+                item.className = "event-card";
+
+                const dataFormatada = new Date(`${c.data}T${c.hora}`).toLocaleDateString("pt-PT", {
+                    day: "2-digit", month: "2-digit", year: "numeric"
+                });
+                const horaFormatada = c.hora.substring(0, 5);
+
+                item.innerHTML = `
+          <h4>${c.nomeAnimal} - ${c.motivo}</h4>
+          <p>${dataFormatada} às ${horaFormatada}</p>
+          <p><strong>Veterinário:</strong> ${c.veterinarioResponsavel}</p>
+          <button class="cancelar-btn" data-id="${c.id}" data-animal="${c.nomeAnimal}" data-data="${dataFormatada}" data-hora="${horaFormatada}">Desmarcar</button>
+        `;
+                eventList.appendChild(item);
+            });
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pt',
+            height: 'auto',
+            events: events,
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `
+            <strong>${info.event.title}</strong><br>
+            ${new Date(info.event.start).toLocaleString("pt-PT")}<br>
+            <strong>Veterinário:</strong> ${info.event.extendedProps.medico}
+          `,
+                    allowHTML: true,
+                    placement: 'top',
+                    animation: 'scale',
+                    theme: 'azul'
+                });
+            }
+        });
+
+        calendar.render();
+    });
+
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("cancelar-btn")) {
+            const id = e.target.getAttribute("data-id");
+            const nome = e.target.getAttribute("data-animal");
+            const data = e.target.getAttribute("data-data");
+            const hora = e.target.getAttribute("data-hora");
+
+            consultaIdSelecionada = id;
+            document.getElementById("textoPopup").innerText = `Tem a certeza que quer desmarcar a consulta de ${nome} no dia ${data} às ${hora}?`;
+            document.getElementById("popupConfirmacao").style.display = "block";
+        }
+    });
+
+    document.getElementById("confirmarSim").addEventListener("click", async function () {
+        if (!consultaIdSelecionada) return;
+        try {
+            const res = await fetch(`${API_URL}/api/consultas/${consultaIdSelecionada}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                document.getElementById("popupConfirmacao").style.display = "none";
+                mostrarSucesso();
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                alert("Erro ao cancelar a consulta.");
+            }
+        } catch (err) {
+            alert("Erro ao comunicar com o servidor.");
+        }
+    });
+
+    function fecharPopup() {
+        document.getElementById("popupConfirmacao").style.display = "none";
+        consultaIdSelecionada = null;
+    }
+
+    function mostrarSucesso() {
+        const alerta = document.getElementById("alertaSucesso");
+        alerta.style.display = "block";
+        setTimeout(() => alerta.style.display = "none", 3000);
+    }
+</script>
+
+</body>
+</html>

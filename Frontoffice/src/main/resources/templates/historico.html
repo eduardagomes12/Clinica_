@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico - GCVet</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+  body, html {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  }
+
+  header {
+  background-color: #0a3968;
+  height: 60px;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  }
+
+  .header-title {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  }
+
+  .header-links a {
+  background-color: white;
+  color: #0a3968;
+  padding: 8px 16px;
+  margin-left: 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  }
+  .header-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .container {
+  display: flex;
+  padding-top: 60px; /* Compensa o header fixo */
+  min-height: 100vh;
+  }
+
+  .sidebar {
+  background-color: #0a3968;
+  width: 220px;
+  color: white;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  padding: 30px 20px;
+  overflow-y: auto;
+  }
+
+  .sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 6px;
+  }
+
+  .sidebar a:hover {
+  background-color: #9acbfa;
+  color: #0a3968;
+  }
+
+  .main {
+  margin-left: 280px;
+  padding: 30px;
+  flex: 1;
+  }
+
+  .main h2 {
+  color: #0a3968;
+  margin-bottom: 20px;
+  font-size: 28px;
+  }
+
+  .controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  }
+
+  .history-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  }
+
+  .history-card h4 {
+  margin: 0;
+  color: #0a3968;
+  font-size: 18px;
+  }
+
+  .history-card p {
+  margin: 5px 0;
+  color: #333;
+  font-size: 14px;
+  }
+
+  .export-btn {
+  background-color: #0a3968;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  }
+
+  .export-btn:hover {
+  background-color: #125296;
+  }
+
+  .historico-grafico-layout {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  }
+
+  .grafico-painel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  min-width: 300px;
+  }
+
+  canvas#graficoConsultas {
+  width: 100% !important;
+  height: auto !important;
+  }
+
+  .resumo-topo {
+    display: flex;
+    gap: 40px;
+    background-color: #e8f0fc;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+  }
+
+  .resumo-topo div {
+    font-size: 15px;
+    color: #0a3968;
+  }
+
+  .notification-icon {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    margin-right: 15px; /* espaço entre o sino e o botão */
+  }
+
+  .notification-icon .badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <div class="header-title">GCVet</div>
+  <div class="header-links">
+    <div class="notification-icon" title="Notificações">
+      🔔
+      <div class="badge">2</div>
+    </div>
+    <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
+  </div>
+</header>
+
+
+<div class="container">
+  <div class="sidebar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/marcarConsulta">Marcar Consulta</a>
+    <a href="/meusAnimais">Meus Animais</a>
+    <a href="/calendario">Calendário</a>
+    <a href="/historico">Histórico</a>
+  </div>
+
+  <div class="main">
+    <h2>Histórico Médico dos Animais</h2>
+
+    <div class="controls">
+      <label for="filtroAnimal"><strong>Animal:</strong></label>
+      <select id="filtroAnimal" style="padding: 6px; border-radius: 6px;"></select>
+
+      <label for="filtroTipo"><strong>Tipo:</strong></label>
+      <select id="filtroTipo" style="padding: 6px; border-radius: 6px;">
+        <option value="">Todos</option>
+        <option value="Vacinação">Vacinação</option>
+        <option value="Cirurgia">Cirurgia</option>
+        <option value="Check-up">Check-up</option>
+        <option value="Análises">Análises</option>
+      </select>
+
+      <button class="export-btn" onclick="exportarPDF()">Exportar PDF</button>
+      <button class="export-btn" onclick="exportarExcel()">Exportar Excel</button>
+    </div>
+
+    <div id="resumoTopo" class="resumo-topo">
+      <div><strong>Total:</strong> <span id="resumoTotal">0</span></div>
+      <div><strong>Última Consulta:</strong> <span id="resumoUltima">-</span></div>
+      <div><strong>Veterinário Mais Consultado:</strong> <span id="resumoVet">-</span></div>
+    </div>
+
+
+    <div class="historico-grafico-layout">
+      <!-- Histórico -->
+      <div style="flex: 2;" id="historicoContainer">
+        <!-- Conteúdo gerado via JS -->
+      </div>
+
+      <!-- Gráfico e Resumo -->
+      <div class="grafico-painel">
+        <h4>📊 Frequência de Consultas por Mês</h4>
+        <canvas id="graficoConsultas" height="200"></canvas>
+        <div id="resumoConsultas" style="margin-top: 20px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+  const API_URL = "http://localhost:8080";
+  const user = JSON.parse(sessionStorage.getItem("utilizador"));
+  if (!user) window.location.href = "/login";
+
+  const selectAnimal = document.getElementById("filtroAnimal");
+  const selectTipo = document.getElementById("filtroTipo");
+  const container = document.getElementById("historicoContainer");
+  const resumoEl = document.getElementById("resumoConsultas");
+
+  let historicoAtual = [];
+  let chart = null;
+
+  async function carregarAnimais() {
+    const res = await fetch(`${API_URL}/api/animais/cliente/${user.id}`);
+    const animais = await res.json();
+    selectAnimal.innerHTML = `<option value="">Todos</option>`;
+    animais.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.id;
+      opt.textContent = a.nome;
+      selectAnimal.appendChild(opt);
+    });
+  }
+
+  async function carregarHistorico() {
+    const res = await fetch(`${API_URL}/api/historico/${user.id}`);
+    const todos = await res.json();
+    const animalId = selectAnimal.value;
+    const tipo = selectTipo.value;
+
+    historicoAtual = todos.filter(h => {
+      const matchAnimal = !animalId || h.idAnimal == animalId;
+      const matchTipo = !tipo || h.tipo === tipo;
+      return matchAnimal && matchTipo;
+    });
+
+    mostrarHistorico();
+    gerarResumo();
+    gerarGrafico();
+  }
+
+  function mostrarHistorico() {
+    container.innerHTML = "";
+    if (historicoAtual.length === 0) {
+      container.innerHTML = "<p>Sem registros disponíveis.</p>";
+      return;
+    }
+
+    historicoAtual.sort((a, b) =>
+            new Date(b.data + "T" + b.hora) - new Date(a.data + "T" + a.hora)
+    );
+
+    historicoAtual.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "history-card";
+      const dataFormatada = new Date(item.data + "T" + item.hora).toLocaleString("pt-PT");
+      const diagnostico = item.diagnostico?.trim() || "-";
+      card.innerHTML = `
+        <h4>${item.nomeAnimal} - ${item.tipo}</h4>
+        <p><strong>Data:</strong> ${dataFormatada}</p>
+        <p><strong>Veterinário:</strong> ${item.veterinario}</p>
+        <p><strong>Diagnóstico:</strong> ${diagnostico}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function gerarResumo() {
+    const total = historicoAtual.length;
+
+    const ultima = historicoAtual.reduce((maisRecente, atual) =>
+                    new Date(atual.data + "T" + atual.hora) > new Date(maisRecente.data + "T" + maisRecente.hora)
+                            ? atual : maisRecente
+            , historicoAtual[0] || {});
+
+    const veterinarios = {};
+    historicoAtual.forEach(h => {
+      veterinarios[h.veterinario] = (veterinarios[h.veterinario] || 0) + 1;
+    });
+    const topVet = Object.entries(veterinarios).sort((a, b) => b[1] - a[1])[0];
+
+    // Resumo lateral
+    resumoEl.innerHTML = `
+      <h4>Resumo</h4>
+      <p><strong>Total de Consultas:</strong> ${total}</p>
+      <p><strong>Última Consulta:</strong> ${ultima.data || "-"} ${ultima.hora || ""}</p>
+      <p><strong>Veterinário Mais Consultado:</strong> ${topVet ? topVet[0] + " (" + topVet[1] + ")" : "-"}</p>
+    `;
+
+    // Resumo topo
+    document.getElementById("resumoTotal").textContent = total;
+    document.getElementById("resumoUltima").textContent = ultima.data ? `${ultima.data} ${ultima.hora}` : "-";
+    document.getElementById("resumoVet").textContent = topVet ? `${topVet[0]} (${topVet[1]})` : "-";
+  }
+
+  function gerarGrafico() {
+    const dadosMensais = {};
+    historicoAtual.forEach(h => {
+      const mesAno = new Date(h.data).toLocaleDateString("pt-PT", { month: "2-digit", year: "numeric" });
+      dadosMensais[mesAno] = (dadosMensais[mesAno] || 0) + 1;
+    });
+
+    const labels = Object.keys(dadosMensais);
+    const valores = Object.values(dadosMensais);
+
+    if (chart) chart.destroy();
+    const ctx = document.getElementById("graficoConsultas").getContext("2d");
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Consultas",
+          data: valores,
+          backgroundColor: "#0a3968"
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+
+  function exportarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(12);
+    let y = 10;
+
+    historicoAtual.forEach(item => {
+      const data = new Date(item.data + "T" + item.hora).toLocaleString("pt-PT");
+      doc.text(`Animal: ${item.nomeAnimal}`, 10, y); y += 6;
+      doc.text(`Tipo: ${item.tipo}`, 10, y); y += 6;
+      doc.text(`Data: ${data}`, 10, y); y += 6;
+      doc.text(`Veterinário: ${item.veterinario}`, 10, y); y += 6;
+      doc.text(`Diagnóstico: ${item.diagnostico || "-"}`, 10, y); y += 10;
+    });
+
+    doc.save("historico_consultas.pdf");
+  }
+
+  function exportarExcel() {
+    const dados = historicoAtual.map(item => ({
+      "Animal": item.nomeAnimal,
+      "Tipo": item.tipo,
+      "Data": new Date(item.data + "T" + item.hora).toLocaleString("pt-PT"),
+      "Veterinário": item.veterinario,
+      "Diagnóstico": item.diagnostico || "-"
+    }));
+
+    const planilha = XLSX.utils.json_to_sheet(dados);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, planilha, "Histórico");
+    XLSX.writeFile(wb, "historico_consultas.xlsx");
+  }
+
+  // Eventos
+  selectAnimal.addEventListener("change", carregarHistorico);
+  selectTipo.addEventListener("change", carregarHistorico);
+  document.addEventListener("DOMContentLoaded", async () => {
+    await carregarAnimais();
+    await carregarHistorico();
+  });
+</script>
+
+
+</body>
+</html>

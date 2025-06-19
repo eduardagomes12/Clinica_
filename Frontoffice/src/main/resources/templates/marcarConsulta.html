@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marcar Consulta - GCVet</title>
+  <style>
+    body, html {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      height: 100%;
+    }
+
+    header {
+      background-color: #0a3968;
+      height: 60px;
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .header-title {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .header-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-links a {
+      background-color: white;
+      color: #0a3968;
+      padding: 8px 16px;
+      margin-left: 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+    }
+
+    .header-links a:hover {
+      background-color: #9acbfa;
+    }
+
+    .notification-icon {
+      position: relative;
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .notification-icon .badge {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .container {
+      display: flex;
+      margin-top: 60px; /* espaço para header fixo */
+    }
+
+    .sidebar {
+      background-color: #0a3968;
+      width: 220px;
+      padding: 30px 20px;
+      color: white;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .sidebar a:hover {
+      background-color: #9acbfa;
+      color: #0a3968;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 60px);
+    }
+
+    .content {
+      width: 100%;
+      max-width: 500px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #0a3968;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      margin-top: 16px;
+      font-weight: bold;
+      color: #0a3968;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    #avisoDisponibilidade {
+      color: #b00020;
+      font-size: 14px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    button {
+      margin-top: 24px;
+      width: 100%;
+      padding: 12px;
+      background-color: #0a3968;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">GCVet</div>
+  <div class="header-links">
+    <div class="notification-icon" title="Notificações">🔔<div class="badge">2</div></div>
+    <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="sidebar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/marcarConsulta">Marcar Consulta</a>
+    <a href="/meusAnimais">Meus Animais</a>
+    <a href="/calendario">Calendário</a>
+    <a href="/historico">Histórico</a>
+  </div>
+
+  <div class="main">
+    <div class="content">
+      <h1>Marcar Nova Consulta</h1>
+      <form id="consultaForm">
+        <label for="animal">Animal</label>
+        <select id="animal" required></select>
+
+        <label for="veterinario">Veterinário</label>
+        <select id="veterinario" required></select>
+
+        <label for="data">Data</label>
+        <input type="date" id="data" required>
+
+        <label for="hora">Hora</label>
+        <input type="time" id="hora" required>
+        <div id="avisoDisponibilidade">O veterinário não está disponível nesse horário.</div>
+
+        <label for="motivo">Motivo</label>
+        <textarea id="motivo" rows="3" placeholder="Descreva o motivo da consulta" required></textarea>
+
+        <button type="submit">Agendar Consulta</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP / TOAST -->
+<div id="popupMensagem" style="display:none; position: fixed; bottom: 30px; right: 30px; padding: 16px 24px; border-radius: 10px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: white;"></div>
+
+<script>
+  const API_URL = "http://localhost:8080";
+  const user = JSON.parse(sessionStorage.getItem("utilizador"));
+  const aviso = document.getElementById("avisoDisponibilidade");
+
+  if (!user) {
+    window.location.href = "/login";
+  }
+
+  // Função para mostrar toast colorido
+  function mostrarPopup(mensagem, tipo = "info") {
+    const popup = document.getElementById("popupMensagem");
+    const cores = {
+      sucesso: "#4caf50",
+      erro: "#d32f2f",
+      aviso: "#f9a825",
+      info: "#1976d2"
+    };
+
+    popup.textContent = mensagem;
+    popup.style.backgroundColor = cores[tipo] || "#333";
+    popup.style.display = "block";
+
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 3000);
+  }
+
+  // Carregar dropdowns
+  fetch(`${API_URL}/api/animais/cliente/${user.id}`)
+          .then(res => res.json())
+          .then(animais => {
+            const select = document.getElementById("animal");
+            animais.forEach(a => {
+              const option = document.createElement("option");
+              option.value = a.id;
+              option.textContent = `${a.nome} (${a.especie})`;
+              select.appendChild(option);
+            });
+          });
+
+  fetch(`${API_URL}/api/utilizadores`)
+          .then(res => res.json())
+          .then(utilizadores => {
+            const vets = utilizadores.filter(u => u.nomeTipoUtilizador === "Veterinário");
+            const select = document.getElementById("veterinario");
+            vets.forEach(v => {
+              const option = document.createElement("option");
+              option.value = v.id;
+              option.textContent = v.nome;
+              select.appendChild(option);
+            });
+          });
+
+  // Ocultar aviso de disponibilidade quando mudar inputs
+  ["data", "hora", "veterinario"].forEach(id => {
+    document.getElementById(id).addEventListener("input", () => aviso.style.display = "none");
+  });
+
+  // Enviar formulário
+  document.getElementById("consultaForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    aviso.style.display = "none";
+
+    const data = document.getElementById("data").value;
+    const hora = document.getElementById("hora").value;
+    const vetId = document.getElementById("veterinario").value;
+    const vetNome = document.getElementById("veterinario").selectedOptions[0].textContent;
+
+    try {
+      const resDisponivel = await fetch(`${API_URL}/api/consultas/disponivel?veterinarioId=${vetId}&data=${data}&hora=${hora}`);
+      const disponivel = await resDisponivel.json();
+
+      if (!disponivel) {
+        aviso.style.display = "block";
+        return;
+      }
+
+      const body = {
+        idUtilizador: user.id,
+        idAnimal: parseInt(document.getElementById("animal").value),
+        data,
+        hora,
+        motivo: document.getElementById("motivo").value,
+        veterinarioResponsavel: vetNome
+      };
+
+      const res = await fetch(`${API_URL}/api/consultas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        mostrarPopup("Consulta agendada com sucesso!", "sucesso");
+        setTimeout(() => window.location.href = "/dashboard", 2000);
+      } else {
+        mostrarPopup("Erro ao agendar consulta.", "erro");
+      }
+    } catch (err) {
+      mostrarPopup("Erro de conexão com o servidor.", "erro");
+      console.error(err);
+    }
+  });
+</script>
+
+</body>
+
+</html>

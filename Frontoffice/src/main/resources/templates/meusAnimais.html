@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <title>Meus Animais - GCVet</title>
+    <style>
+        body, html {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* HEADER NOVO IGUAL AO DASHBOARD */
+        header {
+            background-color: #0a3968;
+            height: 60px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-links a {
+            background-color: white;
+            color: #0a3968;
+            padding: 8px 16px;
+            margin-left: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+        }
+
+        .header-links a:hover {
+            background-color: #9acbfa;
+        }
+
+        .notification-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .notification-icon .badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 60px; /* altura do header */
+            left: 0;
+            width: 220px;
+            background-color: #0a3968;
+            padding: 30px 20px;
+            color: white;
+            height: calc(100vh - 60px);
+        }
+
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background-color: #9acbfa;
+            color: #0a3968;
+        }
+
+        .main {
+            flex: 1;
+            padding: 40px;
+            margin-left: 260px; /* mesma largura do sidebar */
+            margin-top: 60px;    /* mesma altura do header */
+        }
+
+
+        h1 {
+            color: #0a3968;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        th {
+            background-color: #0a3968;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .form-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-box h2 {
+            color: #0a3968;
+            margin-bottom: 10px;
+        }
+
+        .form-box p {
+            margin-bottom: 20px;
+        }
+
+        .form-box input, .form-box textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .form-box button {
+            margin-top: 16px;
+            width: 100%;
+            padding: 12px;
+            background-color: #0a3968;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #0a3968;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 99999;
+            font-weight: bold;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeout {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+
+        #confirmModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99998;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #confirmModal .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        #confirmModal button {
+            margin: 10px 5px 0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #confirmModal .cancel {
+            background-color: #ccc;
+        }
+
+        #confirmModal .confirm {
+            background-color: #0a3968;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">GCVet</div>
+    <div class="header-links">
+        <div class="notification-icon" title="Notificações">🔔<div class="badge">2</div></div>
+        <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/marcarConsulta">Marcar Consulta</a>
+        <a href="/meusAnimais">Meus Animais</a>
+        <a href="/calendario">Calendário</a>
+        <a href="historico">Histórico</a>
+    </div>
+
+    <div class="main">
+        <h1>Meus Animais</h1>
+
+        <table id="animaisTable">
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Idade</th>
+                <th>Espécie</th>
+                <th>Raça</th>
+                <th>Histórico Médico</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="form-box">
+            <h2>Deseja registar um novo animal?</h2>
+            <p>Preencha os dados abaixo para adicionar um novo amigo à sua conta.</p>
+            <form id="animalForm">
+                <input type="text" id="nome" placeholder="Nome" required />
+                <input type="number" id="idade" placeholder="Idade" required />
+                <input type="text" id="especie" placeholder="Espécie" required />
+                <input type="text" id="raca" placeholder="Raça" required />
+                <textarea id="historico" rows="3" placeholder="Histórico Médico" required></textarea>
+                <button type="submit">Adicionar Animal</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<div id="confirmModal">
+    <div class="card">
+        <h3>Tem a certeza que quer remover este animal?</h3>
+        <button class="cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="confirm" onclick="confirmarRemocao()">Sim</button>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:8080";
+    const user = JSON.parse(sessionStorage.getItem("utilizador"));
+    let idParaRemover = null;
+
+    if (!user) {
+        window.location.href = "/login";
+    }
+
+    function mostrarToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.style.display = "block";
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 3000);
+    }
+
+    function abrirModal(idAnimal) {
+        idParaRemover = idAnimal;
+        document.getElementById("confirmModal").style.display = "flex";
+    }
+
+    function fecharModal() {
+        idParaRemover = null;
+        document.getElementById("confirmModal").style.display = "none";
+    }
+
+    async function confirmarRemocao() {
+        if (!idParaRemover) return;
+
+        const res = await fetch(`${API_URL}/api/animais/${idParaRemover}`, {
+            method: "DELETE"
+        });
+
+        if (res.ok) {
+            mostrarToast("Animal removido com sucesso!");
+            carregarAnimais();
+        } else {
+            mostrarToast("Erro ao remover animal.");
+        }
+
+        fecharModal();
+    }
+
+    function carregarAnimais() {
+        fetch(`${API_URL}/api/animais/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(animais => {
+                const tbody = document.querySelector("#animaisTable tbody");
+                tbody.innerHTML = "";
+                animais.forEach(a => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${a.nome}</td>
+                        <td>${a.idade}</td>
+                        <td>${a.especie}</td>
+                        <td>${a.raca}</td>
+                        <td>${a.historicoMedico}</td>
+                        <td>
+                            <button onclick="abrirModal(${a.id})"
+                                style="background-color: #d9534f; color: white; border: none;
+                                padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                                Remover
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+    }
+
+    document.getElementById("animalForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const body = {
+            nome: document.getElementById("nome").value,
+            idade: document.getElementById("idade").value,
+            especie: document.getElementById("especie").value,
+            raca: document.getElementById("raca").value,
+            historicoMedico: document.getElementById("historico").value,
+            clienteId: user.id
+        };
+
+        const res = await fetch(`${API_URL}/api/animais`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+            mostrarToast("Animal registado com sucesso!");
+            carregarAnimais();
+            document.getElementById("animalForm").reset();
+        } else {
+            mostrarToast("Erro ao registar animal.");
+        }
+    });
+
+    carregarAnimais();
+</script>
+
+
+</body>
+</html>

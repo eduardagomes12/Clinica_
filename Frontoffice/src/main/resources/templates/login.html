@@ -127,6 +127,7 @@
 <div class="split-screen">
     <div class="left-side">
         <img src="/logo_branco.png" alt="Logo GCVet">
+        <h1>Bem-vindo à sua clínica veterinária digital</h1>
     </div>
 
     <div class="right-side">
@@ -142,31 +143,61 @@
     </div>
 </div>
 
+<!-- Toast de mensagens -->
+<div id="popupMensagem" style="display:none; position: fixed; bottom: 30px; right: 30px;
+     padding: 16px 24px; border-radius: 10px; font-weight: bold; z-index: 9999;
+     box-shadow: 0 4px 10px rgba(0,0,0,0.2); color: white;">
+</div>
+
 <script>
+    // Toast reutilizável
+    function mostrarPopup(mensagem, tipo = "info") {
+        const popup = document.getElementById("popupMensagem");
+        const cores = {
+            sucesso: "#4caf50",
+            erro: "#d32f2f",
+            aviso: "#f9a825",
+            info: "#1976d2"
+        };
+
+        popup.textContent = mensagem;
+        popup.style.backgroundColor = cores[tipo] || "#333";
+        popup.style.display = "block";
+
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 3000);
+    }
+
+    // Login
     document.getElementById("loginForm").addEventListener("submit", async function(e) {
         e.preventDefault();
 
         const email = this.email.value;
         const senha = this.senha.value;
 
-        const res = await fetch("http://localhost:8080/api/auth/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, senha })
-        });
+        try {
+            const res = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, senha })
+            });
 
-        if (res.ok) {
-            const user = await res.json();
-            alert("Login feito com sucesso!");
-            sessionStorage.setItem("utilizador", JSON.stringify(user));
-            window.location.href = "/dashboard";
-        } else {
-            alert("Credenciais inválidas.");
+            if (res.ok) {
+                const user = await res.json();
+                sessionStorage.setItem("utilizador", JSON.stringify(user));
+                mostrarPopup("Login feito com sucesso!", "sucesso");
+                setTimeout(() => window.location.href = "/dashboard", 1500);
+            } else {
+                mostrarPopup("Credenciais inválidas. Tente novamente.", "erro");
+            }
+        } catch (err) {
+            console.error(err);
+            mostrarPopup("Erro de ligação com o servidor.", "erro");
         }
     });
 </script>
 
 </body>
+
 </html>

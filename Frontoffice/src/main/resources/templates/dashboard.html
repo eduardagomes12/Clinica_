@@ -217,47 +217,40 @@
 
 <div class="container">
     <div class="sidebar">
-        <a href="#">Dashboard</a>
-        <a href="#">Marcar Consulta</a>
-        <a href="#">Meus Animais</a>
-        <a href="#">Histórico</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/marcarConsulta">Marcar Consulta</a>
+        <a href="/meusAnimais">Meus Animais</a>
+        <a href="/calendario">Calendário</a>
+        <a href="/historico">Histórico</a>
     </div>
 
     <div class="main">
         <h1 id="welcomeUser">Olá!</h1>
 
-        <!-- Linha azul -->
+        <!-- Cartões do topo -->
         <div class="card-container top">
-            <div class="card top">
-                <h3>Próxima Consulta</h3>
-                <p>20 de Junho às 15h com Dr. Silva</p>
-            </div>
-            <div class="card top">
-                <h3>Animais Registados</h3>
-                <p>3 animais</p>
-            </div>
-            <div class="card top">
-                <h3>Última Consulta</h3>
-                <p>10 de Junho - Vacinação da Luna</p>
-            </div>
+            <div class="card top"><h3>Próxima Consulta</h3><p id="proximaConsulta">–</p></div>
+            <div class="card top"><h3>Animais Registados</h3><p id="numAnimais">– animais</p></div>
+            <div class="card top"><h3>Última Consulta</h3><p id="ultimaConsulta">–</p></div>
+
         </div>
 
-        <!-- Linha branca -->
+        <!-- Cartões brancos -->
         <div class="card-container" style="margin-top: 30px;">
             <div class="card">
                 <h3>Nova Consulta</h3>
                 <p>Precisa agendar uma nova visita?</p>
-                <button>Marcar</button>
+                <button onclick="window.location.href='/marcarConsulta'">Marcar</button>
             </div>
             <div class="card">
                 <h3>Calendário</h3>
                 <p>Veja o seu histórico e consultas agendadas.</p>
-                <button>Ver Calendário</button>
+                <button onclick="window.location.href='/calendario'">Ver Calendário</button>
             </div>
             <div class="card">
                 <h3>Vacinas e Documentos</h3>
                 <p>Aceda ao histórico de vacinação e ficheiros dos seus animais.</p>
-                <button>Ver Registos</button>
+                <button onclick="window.location.href='/historico'">Ver Registos</button>
             </div>
         </div>
 
@@ -265,169 +258,159 @@
         <h2 class="section-title">Animais Registados</h2>
         <table>
             <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Espécie</th>
-                <th>Raça</th>
-                <th>Idade</th>
-            </tr>
+            <tr><th>Nome</th><th>Espécie</th><th>Raça</th><th>Idade</th></tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>Luna</td>
-                <td>Cão</td>
-                <td>Labrador</td>
-                <td>3 anos</td>
-            </tr>
-            <tr>
-                <td>Mia</td>
-                <td>Gato</td>
-                <td>Siamês</td>
-                <td>2 anos</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
 
-        <!-- Tabela de Consultas -->
+        <!-- Tabela de Consultas Futuras -->
         <h2 class="section-title">Consultas Futuras</h2>
         <table>
             <thead>
-            <tr>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Animal</th>
-                <th>Médico</th>
-                <th>Tipo</th>
-            </tr>
+            <tr><th>Data</th><th>Hora</th><th>Animal</th><th>Médico</th><th>Tipo</th><th>Ações</th></tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>20/06/2025</td>
-                <td>15:00</td>
-                <td>Luna</td>
-                <td>Dr. Silva</td>
-                <td>Vacinação</td>
-            </tr>
-            <tr>
-                <td>23/06/2025</td>
-                <td>10:30</td>
-                <td>Mia</td>
-                <td>Dra. Ferreira</td>
-                <td>Check-up</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
-
     </div>
 </div>
 
+<!-- Modal de Confirmação -->
+<div id="modalConfirm" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+     background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: white; border-radius: 16px; padding: 30px; width: 90%; max-width: 400px; text-align: center;">
+        <p id="modalText" style="color: #333; font-size: 16px;"></p>
+        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+            <button onclick="fecharModal()" style="padding: 10px 20px; border-radius: 10px; border: none; background-color: #ccc; color: black;">Cancelar</button>
+            <button id="btnConfirmarDesmarcar" style="padding: 10px 20px; border-radius: 10px; border: none; background-color: #c62828; color: white;">Sim, Desmarcar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup de sucesso -->
+<div id="popupSucesso" style="display:none; position: fixed; bottom: 30px; right: 30px; background-color: #4caf50;
+     color: white; padding: 16px 24px; border-radius: 10px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    Consulta cancelada com sucesso!
+</div>
+
 <script>
-    const API_URL = "http://localhost:8080"; // <-- Altera se necessário
+    const API_URL = "http://localhost:8080";
     const user = JSON.parse(sessionStorage.getItem("utilizador"));
 
     if (!user) {
         window.location.href = "/login";
     } else {
         document.getElementById("welcomeUser").textContent = "Olá, " + user.nome + "!";
+        carregarConsultasFuturas();
 
-        // 🔵 Animais Registados
         fetch(`${API_URL}/api/animais/cliente/${user.id}`)
             .then(res => res.json())
             .then(animais => {
-                console.log("▶ Animais recebidos:", animais);
-
-                document.querySelector(".card.top:nth-of-type(2) p").textContent =
+                document.getElementById("numAnimais").textContent =
                     `${animais.length} animal${animais.length !== 1 ? 's' : ''}`;
-
                 const tbody = document.querySelector("table:nth-of-type(1) tbody");
                 tbody.innerHTML = "";
                 animais.forEach(animal => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${animal.nome}</td>
-                        <td>${animal.especie}</td>
-                        <td>${animal.raca}</td>
-                        <td>${animal.idade} anos</td>
-                    `;
-                    tbody.appendChild(row);
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${animal.nome}</td>
+                            <td>${animal.especie}</td>
+                            <td>${animal.raca}</td>
+                            <td>${animal.idade} anos</td>
+                        </tr>`;
                 });
-            })
-            .catch(err => console.warn("⚠ Erro ao carregar animais:", err));
+            });
 
-        // 🔵 Próxima Consulta
         fetch(`${API_URL}/api/consultas/cliente/${user.id}/proxima`)
             .then(res => res.json())
             .then(c => {
-                console.log("▶ Próxima consulta recebida:", c);
-
-                const data = c.data ? new Date(c.data).toLocaleDateString("pt-PT") : "Data indefinida";
-                const hora = typeof c.hora === 'string'
-                    ? c.hora.substring(0, 5)
-                    : (c.hora?.hour !== undefined
-                        ? `${String(c.hora.hour).padStart(2, '0')}:${String(c.hora.minute).padStart(2, '0')}`
-                        : "?");
-                const medico = c.veterinarioResponsavel ?? "N/D";
-
-                document.querySelector(".card.top:nth-of-type(1) p").textContent =
+                const data = new Date(c.data).toLocaleDateString("pt-PT");
+                const hora = c.hora?.substring(0, 5) ?? "–";
+                const medico = c.veterinarioResponsavel ?? "–";
+                document.getElementById("proximaConsulta").textContent =
                     `${data} às ${hora} com ${medico}`;
-            })
-            .catch(err => {
-                console.warn("⚠ Erro na próxima consulta:", err);
-                document.querySelector(".card.top:nth-of-type(1) p").textContent = "Sem consultas futuras";
             });
 
-        // 🔵 Última Consulta
         fetch(`${API_URL}/api/consultas/cliente/${user.id}/ultima`)
             .then(res => res.json())
             .then(c => {
-                console.log("▶ Última consulta recebida:", c);
-
-                const data = c.data ? new Date(c.data).toLocaleDateString("pt-PT") : "Data indefinida";
-                const motivo = c.motivo ?? "Motivo desconhecido";
-                const nomeAnimal = c.nomeAnimal ?? "N/D";
-
-                document.querySelector(".card.top:nth-of-type(3) p").textContent =
-                    `${data} - ${motivo} da ${nomeAnimal}`;
-            })
-            .catch(err => {
-                console.warn("⚠ Erro na última consulta:", err);
-                document.querySelector(".card.top:nth-of-type(3) p").textContent = "Sem consultas anteriores";
+                const data = new Date(c.data).toLocaleDateString("pt-PT");
+                const motivo = c.motivo ?? "–";
+                const animal = c.nomeAnimal ?? "–";
+                document.getElementById("ultimaConsulta").textContent =
+                    `${data} - ${motivo} da ${animal}`;
             });
+    }
 
-        // 🔵 Consultas Futuras (tabela)
+    function carregarConsultasFuturas() {
         fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
             .then(res => res.json())
             .then(consultas => {
-                console.log("▶ Consultas recebidas:", consultas);
-
+                const agora = new Date();
                 const tbody = document.querySelector("table:nth-of-type(2) tbody");
                 tbody.innerHTML = "";
-                consultas.forEach(c => {
-                    const data = c.data ? new Date(c.data).toLocaleDateString("pt-PT") : "–";
-                    const hora = typeof c.hora === 'string'
-                        ? c.hora.substring(0, 5)
-                        : (c.hora?.hour !== undefined
-                            ? `${String(c.hora.hour).padStart(2, '0')}:${String(c.hora.minute).padStart(2, '0')}`
-                            : "–");
-                    const nomeAnimal = c.nomeAnimal ?? "–";
-                    const motivo = c.motivo ?? "–";
-                    const medico = c.veterinarioResponsavel ?? "–";
 
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${data}</td>
-                        <td>${hora}</td>
-                        <td>${nomeAnimal}</td>
-                        <td>${medico}</td>
-                        <td>${motivo}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            })
-            .catch(err => console.warn("⚠ Erro ao carregar consultas futuras:", err));
+                consultas
+                    .filter(c => new Date(`${c.data}T${c.hora}`) >= agora)
+                    .sort((a, b) => new Date(`${a.data}T${a.hora}`) - new Date(`${b.data}T${b.hora}`))
+                    .forEach(c => {
+                        const data = new Date(c.data).toLocaleDateString("pt-PT");
+                        const hora = c.hora?.substring(0, 5) ?? "–";
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${data}</td>
+                                <td>${hora}</td>
+                                <td>${c.nomeAnimal}</td>
+                                <td>${c.veterinarioResponsavel}</td>
+                                <td>${c.motivo}</td>
+                                <td><button onclick="confirmarCancelamento(${c.id}, '${data}', '${c.nomeAnimal}')">Desmarcar</button></td>
+                            </tr>`;
+                    });
+            });
     }
+
+    let consultaParaCancelar = null;
+
+    function confirmarCancelamento(id, data, animal) {
+        consultaParaCancelar = { id, data, animal };
+        document.getElementById("modalText").textContent =
+            `Tem a certeza que quer desmarcar a consulta do dia ${data} de ${animal}?`;
+        document.getElementById("modalConfirm").style.display = "flex";
+    }
+
+    function fecharModal() {
+        document.getElementById("modalConfirm").style.display = "none";
+        consultaParaCancelar = null;
+    }
+
+    function mostrarPopup() {
+        const popup = document.getElementById("popupSucesso");
+        popup.style.display = "block";
+        setTimeout(() => { popup.style.display = "none"; }, 3000);
+    }
+
+    document.getElementById("btnConfirmarDesmarcar").addEventListener("click", () => {
+        if (!consultaParaCancelar) return;
+
+        fetch(`${API_URL}/api/consultas/${consultaParaCancelar.id}`, {
+            method: 'DELETE'
+        })
+            .then(res => {
+                fecharModal();
+                if (res.ok) {
+                    mostrarPopup();
+                    carregarConsultasFuturas();
+                } else {
+                    alert("Erro ao cancelar a consulta.");
+                }
+            })
+            .catch(err => {
+                fecharModal();
+                alert("Erro ao cancelar a consulta.");
+            });
+    });
 </script>
 
 
 </body>
+
 </html>
