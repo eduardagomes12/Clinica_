@@ -9,6 +9,7 @@ import com.example.core.reps.UtilizadorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,4 +75,9 @@ public class ConsultaService {
     public Optional<Consulta> findUltimaConsultaByClienteId(Long clienteId) {
         return consultaRepository.findTopByAnimal_Cliente_IdAndDataBeforeOrderByDataDesc(clienteId, LocalDate.now());
     }
+
+    public boolean estaDisponivel(String nomeVeterinario, LocalDate data, LocalTime hora) {
+        return !consultaRepository.existsByVeterinarioResponsavelAndDataAndHora(nomeVeterinario, data, hora);
+    }
+
 }

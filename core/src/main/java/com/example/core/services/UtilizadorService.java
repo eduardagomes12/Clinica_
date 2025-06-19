@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UtilizadorService {
@@ -63,4 +64,14 @@ public class UtilizadorService {
     public Optional<Utilizador> encontrarPorEmail(String email) {
         return utilizadorRepository.findByEmail(email);
     }
+
+    public List<Utilizador> findVeterinarios() {
+        return utilizadorRepository.findAll().stream()
+                .filter(u -> u.getTipoUtilizador() != null &&
+                        u.getTipoUtilizador().getNome() != null &&
+                        u.getTipoUtilizador().getNome().equalsIgnoreCase("Veterinário"))
+                .collect(Collectors.toList());
+    }
+
+
 }
