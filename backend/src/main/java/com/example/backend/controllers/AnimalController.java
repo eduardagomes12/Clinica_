@@ -58,17 +58,13 @@ public class AnimalController {
     public ResponseEntity<?> create(@RequestBody AnimalDTO dto) {
         try {
             Animal entity = fromDTO(dto);
-            if (dto.getClienteId() != null) {
-                Cliente cliente = clienteRepository.findById(dto.getClienteId())
-                        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
-                entity.setCliente(cliente);
-            }
             Animal saved = animalService.save(entity);
             return ResponseEntity.ok(toDTO(saved));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @Operation(summary = "Atualizar animal")
     @PutMapping("/{id}")
@@ -119,6 +115,14 @@ public class AnimalController {
         a.setEspecie(dto.getEspecie());
         a.setRaca(dto.getRaca());
         a.setHistoricoMedico(dto.getHistoricoMedico());
+
+        if (dto.getClienteId() != null) {
+            Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                    .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+            a.setCliente(cliente);
+        }
+
         return a;
     }
+
 }

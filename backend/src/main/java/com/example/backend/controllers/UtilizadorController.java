@@ -77,4 +77,14 @@ public class UtilizadorController {
         }
         return u;
     }
+
+    @GetMapping("/veterinarios")
+    public ResponseEntity<List<UtilizadorDTO>> getVeterinarios() {
+        List<UtilizadorDTO> dtos = service.findVeterinarios().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+
 }

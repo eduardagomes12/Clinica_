@@ -5,6 +5,13 @@ import com.example.core.models.Consulta;
 import com.example.core.services.ConsultaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Optional;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.example.core.models.Utilizador;
+import com.example.core.reps.UtilizadorRepository;
+
 
 import java.util.List;
 
@@ -14,9 +21,13 @@ public class ConsultaController {
 
     private final ConsultaService service;
 
-    public ConsultaController(ConsultaService service) {
+    private final UtilizadorRepository utilizadorRepository;
+
+    public ConsultaController(ConsultaService service, UtilizadorRepository utilizadorRepository) {
         this.service = service;
+        this.utilizadorRepository = utilizadorRepository;
     }
+
 
     @GetMapping
     public ResponseEntity<List<ConsultaDTO>> getAll() {
@@ -115,6 +126,25 @@ public class ConsultaController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
     }
+
+    @GetMapping("/disponivel")
+    public ResponseEntity<Boolean> verificarDisponibilidade(
+            @RequestParam Long veterinarioId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime hora) {
+
+        Optional<Utilizador> vet = utilizadorRepository.findById(veterinarioId);
+        if (vet.isEmpty()) {
+            return ResponseEntity.badRequest().body(false);
+        }
+
+        String nomeVet = vet.get().getNome();
+
+        boolean disponivel = service.estaDisponivel(nomeVet, data, hora);
+        return ResponseEntity.ok(disponivel);
+    }
+
+
 
 
 }
