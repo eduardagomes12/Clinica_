@@ -163,14 +163,36 @@
   </style>
 </head>
 <body>
-
 <header>
   <div class="header-title">GCVet</div>
-  <div class="header-links">
-    <div class="notification-icon" title="Notificações">🔔<div class="badge">2</div></div>
+  <div class="header-links" style="position: relative;">
+
+    <div class="notification-icon" id="notificacaoSino" title="Notificações">
+      🔔
+      <div class="badge" id="notificacaoBadge" style="display: none;">0</div>
+
+      <div id="notificacaoDropdown" style="
+          display: none;
+          position: absolute;
+          top: 40px; /* fica logo abaixo do sino */
+          right: 0;
+          background-color: white;
+          color: #333;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          border-radius: 12px;
+          width: 300px;
+          z-index: 1001;
+          padding: 20px;
+        ">
+        <h4 style="margin-top: 0; color: #0a3968;">Consultas de hoje</h4>
+        <div id="notificacoesConteudo" style="font-size: 14px;"></div>
+      </div>
+    </div>
+
     <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
   </div>
 </header>
+
 
 <div class="container">
   <div class="sidebar">
@@ -215,11 +237,8 @@
   const user = JSON.parse(sessionStorage.getItem("utilizador"));
   const aviso = document.getElementById("avisoDisponibilidade");
 
-  if (!user) {
-    window.location.href = "/login";
-  }
+  if (!user) window.location.href = "/login";
 
-  // Função para mostrar toast colorido
   function mostrarPopup(mensagem, tipo = "info") {
     const popup = document.getElementById("popupMensagem");
     const cores = {
@@ -228,17 +247,12 @@
       aviso: "#f9a825",
       info: "#1976d2"
     };
-
     popup.textContent = mensagem;
     popup.style.backgroundColor = cores[tipo] || "#333";
     popup.style.display = "block";
-
-    setTimeout(() => {
-      popup.style.display = "none";
-    }, 3000);
+    setTimeout(() => popup.style.display = "none", 3000);
   }
 
-  // Carregar dropdowns
   fetch(`${API_URL}/api/animais/cliente/${user.id}`)
           .then(res => res.json())
           .then(animais => {
@@ -264,12 +278,10 @@
             });
           });
 
-  // Ocultar aviso de disponibilidade quando mudar inputs
   ["data", "hora", "veterinario"].forEach(id => {
     document.getElementById(id).addEventListener("input", () => aviso.style.display = "none");
   });
 
-  // Enviar formulário
   document.getElementById("consultaForm").addEventListener("submit", async function (e) {
     e.preventDefault();
     aviso.style.display = "none";
@@ -313,6 +325,59 @@
       mostrarPopup("Erro de conexão com o servidor.", "erro");
       console.error(err);
     }
+  });
+
+  async function atualizarNotificacoesHoje() {
+    const badge = document.getElementById("notificacaoBadge");
+    const lista = document.getElementById("notificacoesConteudo");
+
+    try {
+      const res = await fetch(`${API_URL}/api/consultas/cliente/${user.id}`);
+      const consultas = await res.json();
+      const hoje = new Date();
+      const dia = hoje.getDate(), mes = hoje.getMonth(), ano = hoje.getFullYear();
+
+      const consultasHoje = consultas.filter(c => {
+        const d = new Date(`${c.data}T${c.hora}`);
+        return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+      });
+
+      if (consultasHoje.length > 0) {
+        badge.style.display = "block";
+        badge.textContent = consultasHoje.length;
+        lista.innerHTML = "";
+
+        consultasHoje.forEach(c => {
+          const hora = c.hora?.substring(0, 5) ?? "–";
+          const div = document.createElement("div");
+          div.style.cssText = "background-color:#0a3968;color:white;padding:12px 16px;border-radius:12px;margin-bottom:10px;";
+          div.innerHTML = `<div style="font-weight:bold;font-size:14px;">Hoje às ${hora}</div><div style="font-size:13px;">${c.nomeAnimal} com ${c.veterinarioResponsavel}</div>`;
+          lista.appendChild(div);
+        });
+      } else {
+        badge.style.display = "none";
+        lista.innerHTML = "<p>Sem consultas para hoje.</p>";
+      }
+    } catch (err) {
+      console.error("Erro ao carregar notificações:", err);
+    }
+  }
+
+  document.getElementById("notificacaoSino").addEventListener("click", () => {
+    const dropdown = document.getElementById("notificacaoDropdown");
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.addEventListener("click", e => {
+    const dropdown = document.getElementById("notificacaoDropdown");
+    const icon = document.getElementById("notificacaoSino");
+    if (!dropdown.contains(e.target) && !icon.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    atualizarNotificacoesHoje();
   });
 </script>
 

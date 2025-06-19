@@ -195,18 +195,31 @@
 </head>
 
 <body>
-
 <header>
   <div class="header-title">GCVet</div>
-  <div class="header-links">
-    <div class="notification-icon" title="Notificações">
+  <div class="header-links" style="position: relative;">
+    <div class="notification-icon" title="Notificações" onclick="toggleNotificacoes()">
       🔔
-      <div class="badge">2</div>
+      <div class="badge" id="badgeCount" style="display: none;">0</div>
+    </div>
+    <div id="notificacoesDropdown" style="
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 90px;
+        background-color: white;
+        color: #333;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        border-radius: 12px;
+        width: 300px;
+        z-index: 1001;
+        padding: 20px;">
+      <h4 style="margin-top: 0; color: #0a3968;">Consultas de hoje</h4>
+      <div id="listaNotificacoes" style="font-size: 14px;"></div>
     </div>
     <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
   </div>
 </header>
-
 
 <div class="container">
   <div class="sidebar">
@@ -243,14 +256,9 @@
       <div><strong>Veterinário Mais Consultado:</strong> <span id="resumoVet">-</span></div>
     </div>
 
-
     <div class="historico-grafico-layout">
-      <!-- Histórico -->
-      <div style="flex: 2;" id="historicoContainer">
-        <!-- Conteúdo gerado via JS -->
-      </div>
+      <div style="flex: 2;" id="historicoContainer"></div>
 
-      <!-- Gráfico e Resumo -->
       <div class="grafico-painel">
         <h4>📊 Frequência de Consultas por Mês</h4>
         <canvas id="graficoConsultas" height="200"></canvas>
@@ -259,6 +267,7 @@
     </div>
   </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -303,6 +312,7 @@
     mostrarHistorico();
     gerarResumo();
     gerarGrafico();
+    atualizarNotificacoesHoje();
   }
 
   function mostrarHistorico() {
@@ -322,38 +332,32 @@
       const dataFormatada = new Date(item.data + "T" + item.hora).toLocaleString("pt-PT");
       const diagnostico = item.diagnostico?.trim() || "-";
       card.innerHTML = `
-        <h4>${item.nomeAnimal} - ${item.tipo}</h4>
-        <p><strong>Data:</strong> ${dataFormatada}</p>
-        <p><strong>Veterinário:</strong> ${item.veterinario}</p>
-        <p><strong>Diagnóstico:</strong> ${diagnostico}</p>
-      `;
+      <h4>${item.nomeAnimal} - ${item.tipo}</h4>
+      <p><strong>Data:</strong> ${dataFormatada}</p>
+      <p><strong>Veterinário:</strong> ${item.veterinario}</p>
+      <p><strong>Diagnóstico:</strong> ${diagnostico}</p>
+    `;
       container.appendChild(card);
     });
   }
 
   function gerarResumo() {
     const total = historicoAtual.length;
-
     const ultima = historicoAtual.reduce((maisRecente, atual) =>
-                    new Date(atual.data + "T" + atual.hora) > new Date(maisRecente.data + "T" + maisRecente.hora)
-                            ? atual : maisRecente
-            , historicoAtual[0] || {});
+            new Date(atual.data + "T" + atual.hora) > new Date(maisRecente.data + "T" + maisRecente.hora)
+                    ? atual : maisRecente, historicoAtual[0] || {});
 
     const veterinarios = {};
-    historicoAtual.forEach(h => {
-      veterinarios[h.veterinario] = (veterinarios[h.veterinario] || 0) + 1;
-    });
+    historicoAtual.forEach(h => veterinarios[h.veterinario] = (veterinarios[h.veterinario] || 0) + 1);
     const topVet = Object.entries(veterinarios).sort((a, b) => b[1] - a[1])[0];
 
-    // Resumo lateral
     resumoEl.innerHTML = `
-      <h4>Resumo</h4>
-      <p><strong>Total de Consultas:</strong> ${total}</p>
-      <p><strong>Última Consulta:</strong> ${ultima.data || "-"} ${ultima.hora || ""}</p>
-      <p><strong>Veterinário Mais Consultado:</strong> ${topVet ? topVet[0] + " (" + topVet[1] + ")" : "-"}</p>
-    `;
+    <h4>Resumo</h4>
+    <p><strong>Total de Consultas:</strong> ${total}</p>
+    <p><strong>Última Consulta:</strong> ${ultima.data || "-"} ${ultima.hora || ""}</p>
+    <p><strong>Veterinário Mais Consultado:</strong> ${topVet ? topVet[0] + " (" + topVet[1] + ")" : "-"}</p>
+  `;
 
-    // Resumo topo
     document.getElementById("resumoTotal").textContent = total;
     document.getElementById("resumoUltima").textContent = ultima.data ? `${ultima.data} ${ultima.hora}` : "-";
     document.getElementById("resumoVet").textContent = topVet ? `${topVet[0]} (${topVet[1]})` : "-";
@@ -395,7 +399,6 @@
     const doc = new jsPDF();
     doc.setFontSize(12);
     let y = 10;
-
     historicoAtual.forEach(item => {
       const data = new Date(item.data + "T" + item.hora).toLocaleString("pt-PT");
       doc.text(`Animal: ${item.nomeAnimal}`, 10, y); y += 6;
@@ -404,7 +407,6 @@
       doc.text(`Veterinário: ${item.veterinario}`, 10, y); y += 6;
       doc.text(`Diagnóstico: ${item.diagnostico || "-"}`, 10, y); y += 10;
     });
-
     doc.save("historico_consultas.pdf");
   }
 
@@ -423,12 +425,68 @@
     XLSX.writeFile(wb, "historico_consultas.xlsx");
   }
 
-  // Eventos
+  //  Notificações
+  function atualizarNotificacoesHoje() {
+    fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(consultas => {
+              const hoje = new Date();
+              const dia = hoje.getDate(), mes = hoje.getMonth(), ano = hoje.getFullYear();
+              const badge = document.getElementById("badgeCount");
+              const consultasHoje = consultas.filter(c => {
+                const d = new Date(`${c.data}T${c.hora}`);
+                return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+              });
+              badge.textContent = consultasHoje.length;
+              badge.style.display = consultasHoje.length > 0 ? "block" : "none";
+            });
+  }
+
+  function toggleNotificacoes() {
+    const dropdown = document.getElementById("notificacoesDropdown");
+    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+
+    fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(consultas => {
+              const hoje = new Date();
+              const dia = hoje.getDate(), mes = hoje.getMonth(), ano = hoje.getFullYear();
+              const lista = document.getElementById("listaNotificacoes");
+              lista.innerHTML = "";
+
+              const consultasHoje = consultas.filter(c => {
+                const d = new Date(`${c.data}T${c.hora}`);
+                return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+              });
+
+              if (consultasHoje.length === 0) {
+                lista.innerHTML = "<p>Sem consultas para hoje.</p>";
+              } else {
+                consultasHoje.forEach(c => {
+                  const hora = c.hora?.substring(0, 5) ?? "–";
+                  lista.innerHTML += `
+            <div style="background-color:#0a3968;color:white;padding:12px 16px;border-radius:12px;margin-bottom:10px;">
+              <div style="font-weight:bold;font-size:14px;">Hoje às ${hora}</div>
+              <div style="font-size:13px;">${c.nomeAnimal} com ${c.veterinarioResponsavel}</div>
+            </div>`;
+                });
+              }
+            });
+  }
+
   selectAnimal.addEventListener("change", carregarHistorico);
   selectTipo.addEventListener("change", carregarHistorico);
   document.addEventListener("DOMContentLoaded", async () => {
     await carregarAnimais();
     await carregarHistorico();
+  });
+
+  document.addEventListener("click", e => {
+    const dropdown = document.getElementById("notificacoesDropdown");
+    const icon = document.querySelector(".notification-icon");
+    if (!dropdown.contains(e.target) && !icon.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
   });
 </script>
 

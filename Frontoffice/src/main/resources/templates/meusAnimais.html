@@ -244,11 +244,28 @@
     </style>
 </head>
 <body>
-
 <header>
     <div class="header-title">GCVet</div>
-    <div class="header-links">
-        <div class="notification-icon" title="Notificações">🔔<div class="badge">2</div></div>
+    <div class="header-links" style="position: relative;">
+        <div class="notification-icon" id="notificacaoSino" title="Notificações" onclick="toggleNotificacoes()">
+            🔔
+            <div class="badge" id="notificacaoBadge" style="display: none;">0</div>
+            <div id="notificacaoDropdown" style="
+          display: none;
+          position: absolute;
+          top: 60px;
+          right: 0;
+          background-color: white;
+          color: #333;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          border-radius: 12px;
+          width: 300px;
+          z-index: 1001;
+          padding: 20px;">
+                <h4 style="margin-top: 0; color: #0a3968;">Consultas de hoje</h4>
+                <div id="notificacoesConteudo" style="font-size: 14px;"></div>
+            </div>
+        </div>
         <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
     </div>
 </header>
@@ -358,19 +375,19 @@
                 animais.forEach(a => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td>${a.nome}</td>
-                        <td>${a.idade}</td>
-                        <td>${a.especie}</td>
-                        <td>${a.raca}</td>
-                        <td>${a.historicoMedico}</td>
-                        <td>
-                            <button onclick="abrirModal(${a.id})"
-                                style="background-color: #d9534f; color: white; border: none;
-                                padding: 6px 12px; border-radius: 6px; cursor: pointer;">
-                                Remover
-                            </button>
-                        </td>
-                    `;
+                    <td>${a.nome}</td>
+                    <td>${a.idade}</td>
+                    <td>${a.especie}</td>
+                    <td>${a.raca}</td>
+                    <td>${a.historicoMedico}</td>
+                    <td>
+                        <button onclick="abrirModal(${a.id})"
+                            style="background-color: #d9534f; color: white; border: none;
+                            padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                            Remover
+                        </button>
+                    </td>
+                `;
                     tbody.appendChild(row);
                 });
             });
@@ -404,8 +421,73 @@
     });
 
     carregarAnimais();
-</script>
 
+    // ---------- NOTIFICAÇÕES ----------
+
+    function toggleNotificacoes() {
+        const dropdown = document.getElementById("notificacaoDropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+
+        fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(consultas => {
+                const hoje = new Date();
+                const dia = hoje.getDate(), mes = hoje.getMonth(), ano = hoje.getFullYear();
+                const lista = document.getElementById("notificacoesConteudo");
+                lista.innerHTML = "";
+
+                const hojeConsultas = consultas.filter(c => {
+                    const d = new Date(`${c.data}T${c.hora}`);
+                    return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+                });
+
+                if (hojeConsultas.length === 0) {
+                    lista.innerHTML = "<p>Sem consultas para hoje.</p>";
+                } else {
+                    hojeConsultas.forEach(c => {
+                        const hora = c.hora?.substring(0, 5) ?? "–";
+                        lista.innerHTML += `
+                        <div style="background-color:#0a3968;color:white;padding:12px 16px;border-radius:12px;margin-bottom:10px;">
+                            <div style="font-weight:bold;font-size:14px;">Hoje às ${hora}</div>
+                            <div style="font-size:13px;">${c.nomeAnimal} com ${c.veterinarioResponsavel}</div>
+                        </div>`;
+                    });
+                }
+            });
+    }
+
+    function atualizarNotificacoesHoje() {
+        const badge = document.getElementById("notificacaoBadge");
+
+        fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(consultas => {
+                const hoje = new Date();
+                const dia = hoje.getDate(), mes = hoje.getMonth(), ano = hoje.getFullYear();
+
+                const hojeConsultas = consultas.filter(c => {
+                    const d = new Date(`${c.data}T${c.hora}`);
+                    return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+                });
+
+                badge.textContent = hojeConsultas.length;
+                badge.style.display = hojeConsultas.length > 0 ? "block" : "none";
+            });
+    }
+
+    // Fecha o dropdown se clicar fora
+    document.addEventListener("click", e => {
+        const dropdown = document.getElementById("notificacaoDropdown");
+        const icon = document.getElementById("notificacaoSino");
+        if (!dropdown.contains(e.target) && !icon.contains(e.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        atualizarNotificacoesHoje();
+    });
+</script>
 
 </body>
 </html>

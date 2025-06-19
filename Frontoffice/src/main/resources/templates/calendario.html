@@ -236,13 +236,28 @@
     </style>
 </head>
 <body>
-
 <header>
     <div class="header-title">GCVet</div>
-    <div class="header-links">
-        <div class="notification-icon" title="Notificações">
+    <div class="header-links" style="position: relative;">
+        <div class="notification-icon" title="Notificações" onclick="toggleNotificacoes()">
             🔔
-            <div class="badge">2</div>
+            <div class="badge" id="badgeCount" style="display: none;">0</div>
+        </div>
+        <div id="notificacoesDropdown" style="
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 90px;
+            background-color: white;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            width: 300px;
+            z-index: 1001;
+            padding: 20px;
+        ">
+            <h4 style="margin-top: 0; color: #0a3968;">Consultas de hoje</h4>
+            <div id="listaNotificacoes" style="font-size: 14px;"></div>
         </div>
         <a href="/login" onclick="sessionStorage.clear()">Terminar Sessão</a>
     </div>
@@ -259,7 +274,6 @@
 
     <div class="main">
         <div id="calendar"></div>
-
         <div class="upcoming">
             <h3>Próximas Consultas</h3>
             <div id="eventList"></div>
@@ -278,10 +292,10 @@
 <div class="alerta-sucesso" id="alertaSucesso">Consulta cancelada com sucesso!</div>
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
-
 <script>
     const API_URL = "http://localhost:8080";
     const user = JSON.parse(sessionStorage.getItem("utilizador"));
@@ -316,17 +330,15 @@
                 const item = document.createElement("div");
                 item.className = "event-card";
 
-                const dataFormatada = new Date(`${c.data}T${c.hora}`).toLocaleDateString("pt-PT", {
-                    day: "2-digit", month: "2-digit", year: "numeric"
-                });
+                const dataFormatada = new Date(`${c.data}T${c.hora}`).toLocaleDateString("pt-PT");
                 const horaFormatada = c.hora.substring(0, 5);
 
                 item.innerHTML = `
-          <h4>${c.nomeAnimal} - ${c.motivo}</h4>
-          <p>${dataFormatada} às ${horaFormatada}</p>
-          <p><strong>Veterinário:</strong> ${c.veterinarioResponsavel}</p>
-          <button class="cancelar-btn" data-id="${c.id}" data-animal="${c.nomeAnimal}" data-data="${dataFormatada}" data-hora="${horaFormatada}">Desmarcar</button>
-        `;
+                <h4>${c.nomeAnimal} - ${c.motivo}</h4>
+                <p>${dataFormatada} às ${horaFormatada}</p>
+                <p><strong>Veterinário:</strong> ${c.veterinarioResponsavel}</p>
+                <button class="cancelar-btn" data-id="${c.id}" data-animal="${c.nomeAnimal}" data-data="${dataFormatada}" data-hora="${horaFormatada}">Desmarcar</button>
+            `;
                 eventList.appendChild(item);
             });
 
@@ -338,10 +350,10 @@
             eventDidMount: function (info) {
                 tippy(info.el, {
                     content: `
-            <strong>${info.event.title}</strong><br>
-            ${new Date(info.event.start).toLocaleString("pt-PT")}<br>
-            <strong>Veterinário:</strong> ${info.event.extendedProps.medico}
-          `,
+                    <strong>${info.event.title}</strong><br>
+                    ${new Date(info.event.start).toLocaleString("pt-PT")}<br>
+                    <strong>Veterinário:</strong> ${info.event.extendedProps.medico}
+                `,
                     allowHTML: true,
                     placement: 'top',
                     animation: 'scale',
@@ -351,6 +363,7 @@
         });
 
         calendar.render();
+        atualizarNotificacoesHoje();
     });
 
     document.addEventListener("click", function (e) {
@@ -393,6 +406,56 @@
         const alerta = document.getElementById("alertaSucesso");
         alerta.style.display = "block";
         setTimeout(() => alerta.style.display = "none", 3000);
+    }
+
+    function atualizarNotificacoesHoje() {
+        fetch(`${API_URL}/api/consultas/cliente/${user.id}`)
+            .then(res => res.json())
+            .then(consultas => {
+                const hoje = new Date();
+                const diaHoje = hoje.getDate();
+                const mesHoje = hoje.getMonth();
+                const anoHoje = hoje.getFullYear();
+                const badge = document.getElementById("badgeCount");
+                const lista = document.getElementById("listaNotificacoes");
+
+                const consultasHoje = consultas.filter(c => {
+                    const dataConsulta = new Date(`${c.data}T${c.hora}`);
+                    return (
+                        dataConsulta.getDate() === diaHoje &&
+                        dataConsulta.getMonth() === mesHoje &&
+                        dataConsulta.getFullYear() === anoHoje
+                    );
+                });
+
+                badge.textContent = consultasHoje.length;
+                badge.style.display = consultasHoje.length > 0 ? "block" : "none";
+
+                if (lista) {
+                    lista.innerHTML = consultasHoje.map(c => {
+                        const hora = c.hora?.substring(0, 5) ?? "–";
+                        return `
+                        <div style="background-color: #0a3968; color: white; padding: 12px 16px; border-radius: 12px; margin-bottom: 10px;">
+                            <div style="font-weight: bold;">Hoje às ${hora}</div>
+                            <div>${c.nomeAnimal} com ${c.veterinarioResponsavel}</div>
+                        </div>
+                    `;
+                    }).join("") || "<p>Sem consultas para hoje.</p>";
+                }
+            });
+    }
+
+    document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("notificacoesDropdown");
+        const icon = document.querySelector(".notification-icon");
+        if (!dropdown.contains(event.target) && !icon.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    function toggleNotificacoes() {
+        const dropdown = document.getElementById("notificacoesDropdown");
+        dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
     }
 </script>
 

@@ -104,6 +104,20 @@
             color: #ffffff;
             margin: 0;
         }
+
+        /* Toast popup */
+        #popupMensagem {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -128,10 +142,34 @@
 
     <div class="right-side">
         <img src="/logo_branco.png" alt="Logo GCVet">
+        <h1>Bem-vindo à sua clínica veterinária digital</h1>
     </div>
 </div>
 
+<!-- Toast popup -->
+<div id="popupMensagem"></div>
+
 <script>
+    // Função de popup reutilizável
+    function mostrarPopup(mensagem, tipo = "info") {
+        const popup = document.getElementById("popupMensagem");
+        const cores = {
+            sucesso: "#4caf50",
+            erro: "#d32f2f",
+            aviso: "#f9a825",
+            info: "#1976d2"
+        };
+
+        popup.textContent = mensagem;
+        popup.style.backgroundColor = cores[tipo] || "#333";
+        popup.style.display = "block";
+
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 3000);
+    }
+
+    // Submissão do formulário
     document.getElementById("registarForm").addEventListener("submit", async function(e) {
         e.preventDefault();
 
@@ -139,21 +177,26 @@
         const email = this.email.value;
         const senha = this.senha.value;
 
-        const res = await fetch("http://localhost:8080/api/auth/registar", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nome, email, senha }) // só envia dados do utilizador
-        });
+        try {
+            const res = await fetch("http://localhost:8080/api/auth/registar", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome, email, senha })
+            });
 
-        if (res.ok) {
-            alert("Conta criada com sucesso!");
-            window.location.href = "/login";
-        } else if (res.status === 409) {
-            alert("Já existe uma conta com este email.");
-        } else {
-            alert("Erro ao criar conta.");
+            if (res.ok) {
+                mostrarPopup("Conta criada com sucesso!", "sucesso");
+                setTimeout(() => window.location.href = "/login", 1500);
+            } else if (res.status === 409) {
+                mostrarPopup("Já existe uma conta com este email.", "aviso");
+            } else {
+                mostrarPopup("Erro ao criar conta.", "erro");
+            }
+        } catch (err) {
+            console.error(err);
+            mostrarPopup("Erro de ligação com o servidor.", "erro");
         }
     });
 </script>
