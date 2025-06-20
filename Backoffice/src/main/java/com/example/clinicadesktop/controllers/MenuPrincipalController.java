@@ -40,6 +40,13 @@ public class MenuPrincipalController {
     @FXML private Button btnConsultarAgenda;
     @FXML private Button btnEmitirFatura;
     @FXML private Button btnListarFaturas;
+    @FXML private Button btnRegistarTratamento;
+    @FXML private Button btnListarTratamentos;
+    @FXML private Button btnRegistarEntradaStock;
+    @FXML private Button btnSaidaStock;
+    @FXML private Button btnVerificarConsultaAnimal;
+
+
 
 
     @Autowired
@@ -72,7 +79,7 @@ public class MenuPrincipalController {
         }
     }
 
-    private void aplicarPermissoes() {
+    public void aplicarPermissoes() {
         if (tipoUtilizador == null) return;
 
         switch (tipoUtilizador) {
@@ -83,13 +90,19 @@ public class MenuPrincipalController {
                 btnListarPagamentos.setVisible(false);
                 btnEmitirFatura.setVisible(false);
                 btnListarFaturas.setVisible(false);
+                btnRegistarEntradaStock.setVisible(false);
                 break;
 
-            case "Recepcionista":
+            case "Rececionista":
                 btnListarConsultas.setVisible(false);
+                btnRegistarTratamento.setVisible(false);
+                btnRegistarEntradaStock.setVisible(false);
+                btnSaidaStock.setVisible(false);
                 break;
+
 
             // Administrador pode tudo (não escondemos nada)
+
         }
     }
 
@@ -152,6 +165,15 @@ public class MenuPrincipalController {
 
     @FXML private void abrirEmitirFatura() { carregarConteudo("/views/emitirFatura.fxml");}
 
+    @FXML private void abrirRegistarTratamento() { carregarConteudo("/views/registarTratamento.fxml");}
+
+    @FXML private void abrirListarTratamentos() { carregarConteudo("/views/listarTratamentos.fxml");}
+
+    @FXML private void abrirRegistarEntradaStock() { carregarConteudo("/views/registarEntradaStock.fxml");}
+
+    @FXML private void abrirSaidaStock() { carregarConteudo("/views/saidaStock.fxml");}
+
+    @FXML private void abrirVerificarConsultaAnimal() { carregarConteudo("/views/verificarConsultaAnimal.fxml");}
 
 
     @FXML

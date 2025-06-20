@@ -4,15 +4,15 @@
 <?import javafx.scene.layout.*?>
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.example.clinicadesktop.controllers.ListarAnimaisController"
-           prefWidth="700" prefHeight="400">
-    <VBox spacing="20" alignment="CENTER">
-        <Label text="Lista de Animais" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+           fx:controller="com.example.clinicadesktop.controllers.ListarAnimaisController">
+
+    <VBox spacing="20" alignment="CENTER" style="-fx-padding: 40;" prefWidth="700" prefHeight="400">
+        <Label text="Lista de Animais" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
         <TableView fx:id="tabelaAnimais" prefWidth="700" prefHeight="300">
             <columns>
                 <TableColumn fx:id="nomeColumn" text="Nome" prefWidth="120"/>
-                <TableColumn fx:id="idadeColumn" text="Idade" prefWidth="80"/>
+                <TableColumn fx:id="idadeColumn" text="Idade" prefWidth="120"/>
                 <TableColumn fx:id="especieColumn" text="Espécie" prefWidth="120"/>
                 <TableColumn fx:id="racaColumn" text="Raça" prefWidth="120"/>
                 <TableColumn fx:id="clienteColumn" text="Dono" prefWidth="180"/>

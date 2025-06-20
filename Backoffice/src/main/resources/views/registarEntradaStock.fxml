@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.clinicadesktop.controllers.RegistarEntradaStockController">
+
+    <VBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20" maxWidth="550" style="
+            -fx-background-color: white;
+            -fx-padding: 30;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.3, 0, 4);
+        ">
+
+            <Label text="Reposição de Stock" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <GridPane hgap="10" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" />
+                    <ColumnConstraints prefWidth="380" />
+                </columnConstraints>
+
+                <Label text="Produto:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="produtoComboBox" promptText="Selecionar Produto"
+                          GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250"/>
+
+                <Label text="Qtd (unid.):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="quantidadeField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Data de Entrada:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="dataPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Guardar" onAction="#guardarEntrada" prefWidth="150"/>
+                <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="150"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</StackPane>

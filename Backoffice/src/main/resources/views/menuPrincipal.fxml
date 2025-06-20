@@ -24,25 +24,32 @@
 
     <!-- SIDE MENU -->
     <left>
-        <VBox fx:id="sideMenu" styleClass="side-menu" spacing="0" alignment="TOP_LEFT" prefWidth="180">
-            <Button fx:id="btnRegistarCliente" text="Registar Cliente" onAction="#abrirRegistarCliente" styleClass="side-button"/>
-            <Button fx:id="btnListarClientes" text="Listar Clientes" onAction="#abrirListarClientes" styleClass="side-button"/>
-            <Button fx:id="btnRegistarAnimal" text="Registar Animal" onAction="#abrirRegistarAnimal" styleClass="side-button"/>
-            <Button fx:id="btnListarAnimais" text="Listar Animais" onAction="#abrirListarAnimais" styleClass="side-button"/>
-            <Button fx:id="btnMarcarConsulta" text="Marcar Consulta" onAction="#abrirMarcarConsulta" styleClass="side-button"/>
-            <Button fx:id="btnListarConsultas" text="Listar Consultas" onAction="#abrirListarConsultas" styleClass="side-button"/>
-            <Button fx:id="btnRegistarPagamento" text="Registar Pagamento" onAction="#abrirRegistarPagamento" styleClass="side-button"/>
-            <Button fx:id="btnListarPagamentos" text="Listar Pagamentos" onAction="#abrirListarPagamentos" styleClass="side-button"/>
-            <Button fx:id="btnConsultarAgenda" text="Consultar Agenda" onAction="#abrirConsultarAgenda" styleClass="side-button"/>
-            <Button fx:id="btnListarFaturas" text="Listar Faturas" onAction="#abrirListarFaturas" styleClass="side-button"/>
-            <Button fx:id="btnEmitirFatura" text="Emitir Fatura" onAction="#abrirEmitirFatura" styleClass="side-button"/>
+        <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED" prefWidth="220">
+            <VBox fx:id="sideMenu" styleClass="side-menu" spacing="0" alignment="TOP_LEFT" prefWidth="300">
+                <Button fx:id="btnRegistarCliente" text="Registar Cliente" onAction="#abrirRegistarCliente" styleClass="side-button"/>
+                <Button fx:id="btnListarClientes" text="Listar Clientes" onAction="#abrirListarClientes" styleClass="side-button"/>
+                <Button fx:id="btnRegistarAnimal" text="Registar Animal" onAction="#abrirRegistarAnimal" styleClass="side-button"/>
+                <Button fx:id="btnListarAnimais" text="Listar Animais" onAction="#abrirListarAnimais" styleClass="side-button"/>
+                <Button fx:id="btnMarcarConsulta" text="Marcar Consulta" onAction="#abrirMarcarConsulta" styleClass="side-button"/>
+                <Button fx:id="btnListarConsultas" text="Listar Consultas" onAction="#abrirListarConsultas" styleClass="side-button"/>
+                <Button fx:id="btnRegistarPagamento" text="Registar Pagamento" onAction="#abrirRegistarPagamento" styleClass="side-button"/>
+                <Button fx:id="btnListarPagamentos" text="Listar Pagamentos" onAction="#abrirListarPagamentos" styleClass="side-button"/>
+                <Button fx:id="btnConsultarAgenda" text="Consultar Agenda" onAction="#abrirConsultarAgenda" styleClass="side-button"/>
+                <Button fx:id="btnListarFaturas" text="Listar Faturas" onAction="#abrirListarFaturas" styleClass="side-button"/>
+                <Button fx:id="btnEmitirFatura" text="Emitir Fatura" onAction="#abrirEmitirFatura" styleClass="side-button"/>
+                <Button fx:id="btnRegistarTratamento" text="Registar Tratamento" onAction="#abrirRegistarTratamento" styleClass="side-button"/>
+                <Button fx:id="btnListarTratamentos" text="Listar Tratamentos" onAction="#abrirListarTratamentos" styleClass="side-button"/>
+                <Button fx:id="btnRegistarEntradaStock" text="Reposição de Stock" onAction="#abrirRegistarEntradaStock" styleClass="side-button"/>
+                <Button fx:id="btnSaidaStock" text="Gestão de Stock" onAction="#abrirSaidaStock" styleClass="side-button"/>
+                <Button fx:id="btnVerificarConsultaAnimal" text="Verificar Consultas Animal" onAction="#abrirVerificarConsultaAnimal" styleClass="side-button"/>
 
 
 
-            <Pane VBox.vgrow="ALWAYS"/> <!-- Empurra o botão para o fundo -->
+                <Pane VBox.vgrow="ALWAYS"/> <!-- Empurra o botão para o fundo -->
 
-            <Button text="Terminar Sessão" onAction="#terminarSessao" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" alignment="CENTER" maxWidth="Infinity" />
-        </VBox>
+                <Button text="Terminar Sessão" onAction="#terminarSessao" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" alignment="CENTER" maxWidth="Infinity" />
+            </VBox>
+        </ScrollPane>
     </left>
 
     <!-- CENTER CONTAINER DINÂMICO -->

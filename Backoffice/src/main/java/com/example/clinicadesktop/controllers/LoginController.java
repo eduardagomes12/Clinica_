@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LoginController {
 
-    // 🔒 Armazena o utilizador autenticado para uso global
+    //  Armazena o utilizador autenticado para uso global
     public static Utilizador utilizadorAutenticado;
 
     @FXML
@@ -40,7 +40,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        userTypeComboBox.getItems().addAll("Administrador", "Veterinário", "Recepcionista");
+        userTypeComboBox.getItems().addAll("Administrador", "Veterinário", "Rececionista");
 
         try {
             logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/logo.png")));
@@ -70,7 +70,7 @@ public class LoginController {
 
         if (utilizador != null) {
             try {
-                // 🔐 Guardar o utilizador autenticado
+                // Guardar o utilizador autenticado
                 utilizadorAutenticado = utilizador;
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuPrincipal.fxml"));
@@ -80,6 +80,7 @@ public class LoginController {
                 // Passar o tipo de utilizador para o menu principal
                 MenuPrincipalController menuController = loader.getController();
                 menuController.setTipoUtilizador(tipo);
+                menuController.aplicarPermissoes();
 
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 Scene scene = new Scene(root, 1100, 700);

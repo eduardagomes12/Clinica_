@@ -100,7 +100,11 @@ public class EmitirFaturaController {
         Pagamento pagamentoSelecionado = pagamentoComboBox.getValue();
 
         if (pagamentoSelecionado == null) {
-            mensagemLabel.setText("Seleciona um pagamento.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Selecione um pagamento.");
+            alert.showAndWait();
             return;
         }
 
@@ -115,7 +119,12 @@ public class EmitirFaturaController {
         pagamentoSelecionado.setFatura(salva);
         pagamentoService.save(pagamentoSelecionado);
 
-        mensagemLabel.setText("Fatura emitida com sucesso!");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sucesso");
+        alert.setHeaderText(null);
+        alert.setContentText("Fatura emitida com sucesso!");
+        alert.showAndWait();
+
         pagamentoComboBox.getItems().remove(pagamentoSelecionado);
         labelValor.setText("");
         labelTipoPagamento.setText("");

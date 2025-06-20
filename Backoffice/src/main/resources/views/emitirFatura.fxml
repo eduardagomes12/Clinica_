@@ -4,38 +4,45 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.clinicadesktop.controllers.EmitirFaturaController"
-      spacing="15" alignment="CENTER" style="-fx-padding: 40;" prefWidth="800" prefHeight="500">
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.clinicadesktop.controllers.EmitirFaturaController">
 
-    <Label text="Emitir Fatura" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+    <VBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20" maxWidth="550" style="
+            -fx-background-color: white;
+            -fx-padding: 30;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.3, 0, 4);
+        ">
+            <Label text="Emitir Fatura" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
 
-    <GridPane hgap="15" vgap="15">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT"/>
-            <ColumnConstraints prefWidth="300"/>
-        </columnConstraints>
+            <GridPane hgap="10" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT"/>
+                    <ColumnConstraints prefWidth="260"/>
+                </columnConstraints>
 
-        <Label text="Número da Fatura:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <Label fx:id="labelNumeroFatura" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Nº fatura:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="labelNumeroFatura" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Pagamento:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="pagamentoComboBox" prefWidth="300" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Pagamento:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="pagamentoComboBox" prefWidth="260" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="Valor:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <Label fx:id="labelValor" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+                <Label text="Valor:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="labelValor" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
 
-        <Label text="Data de Emissão:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <Label fx:id="labelDataAtual" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+                <Label text="Data de Emissão:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="labelDataAtual" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
 
-        <Label text="Tipo de Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <Label fx:id="labelTipoPagamento" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
-    </GridPane>
+                <Label text="Tipo de Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="labelTipoPagamento" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+            </GridPane>
 
-    <Label fx:id="mensagemLabel" style="-fx-text-fill: green;" />
-
-    <HBox spacing="15" alignment="CENTER">
-        <Button fx:id="btnEmitir" text="Emitir Fatura" onAction="#emitirFatura" prefWidth="150"/>
-        <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="150"/>
-    </HBox>
-</VBox>
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="btnEmitir" text="Emitir Fatura" onAction="#emitirFatura" prefWidth="140"/>
+                <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="140"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</StackPane>

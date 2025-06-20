@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.clinicadesktop.controllers.VerificarConsultaAnimalController">
+
+    <VBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20" maxWidth="460" style="
+            -fx-background-color: white;
+            -fx-padding: 30;
+            -fx-border-radius: 12;
+            -fx-background-radius: 12;
+            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.3, 0, 4);
+        ">
+
+            <Label text="Verificar Consultas Futuras" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Selecionar Animal:" />
+                <ComboBox fx:id="animalComboBox" promptText="Animal" prefWidth="250"/>
+            </HBox>
+
+            <Button text="Verificar Consulta" onAction="#verificarConsulta" prefWidth="180"/>
+            <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" />
+        </VBox>
+    </VBox>
+</StackPane>

@@ -3,19 +3,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.clinicadesktop.controllers.ConsultarAgendaController">
-    <children>
-        <VBox spacing="10.0" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefWidth="600.0" prefHeight="400.0">
-            <Label text="Consultar Agenda de Veterinário" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.clinicadesktop.controllers.ConsultarAgendaController"
+           style="-fx-padding: 40;">
 
-            <ComboBox fx:id="veterinarioComboBox" prefWidth="300.0" promptText="Escolha o veterinário"/>
+    <VBox spacing="20" alignment="CENTER" maxWidth="600">
+        <Label text="Consultar Agenda de Veterinário" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-            <TableView fx:id="consultaTable" prefHeight="300.0" prefWidth="580.0">
-                <columns>
-                    <TableColumn fx:id="colData" text="Data" />
-                    <TableColumn fx:id="colAnimal" text="Animal" />
-                </columns>
-            </TableView>
-        </VBox>
-    </children>
-</AnchorPane>
+        <ComboBox fx:id="veterinarioComboBox" prefWidth="300" promptText="Escolha o veterinário"/>
+
+        <TableView fx:id="consultaTable" prefHeight="300" prefWidth="580">
+            <columns>
+                <TableColumn fx:id="colData" text="Data" prefWidth="290"/>
+                <TableColumn fx:id="colAnimal" text="Animal" prefWidth="290"/>
+            </columns>
+        </TableView>
+    </VBox>
+</StackPane>

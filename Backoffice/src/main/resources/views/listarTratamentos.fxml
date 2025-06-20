@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.clinicadesktop.controllers.ListarTratamentosController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 30;" prefWidth="800" prefHeight="600">
+
+    <Label text="Lista de Tratamentos" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtrar por Animal:" />
+        <ComboBox fx:id="animalComboBox" prefWidth="250" promptText="Selecionar animal" />
+        <Button text="Filtrar" onAction="#filtrarPorAnimal" />
+        <Button text="Limpar Filtro" onAction="#limparFiltro" />
+    </HBox>
+
+    <TableView fx:id="tabelaTratamentos" prefHeight="400" prefWidth="750">
+        <columns>
+            <TableColumn fx:id="colData" text="Data" prefWidth="150" />
+            <TableColumn fx:id="colDescricao" text="Descrição" prefWidth="200" />
+            <TableColumn fx:id="colStatus" text="Estado" prefWidth="150" />
+            <TableColumn fx:id="colTipoTratamento" text="Tipo de Tratamento" prefWidth="200" />
+            <TableColumn fx:id="colAnimal" text="Animal" prefWidth="160" />
+        </columns>
+    </TableView>
+
+    <Button text="Voltar ao Menu" onAction="#voltarMenuPrincipal" prefWidth="200"/>
+</VBox>
